@@ -1,91 +1,82 @@
 import argparse
 import re
 import os
+from xml.etree import ElementTree as ET
+import nltk
+
+def remove_stopwords(text: str) -> str:
+    nltk.download('stopwords')
+    stopwords = set(nltk.corpus.stopwords.words('english'))
+    
+    output = " ".join([word for word in text.split(" ") if word not in stopwords])
+    return output
 
 class XMLtrans:
-    def __init__(self, input_file: str,) -> None:
-        self.input_file = input_file
+    def __init__(self, input_file: str, verify_integrity: bool = False) -> None:
+        self.root = ET.parse(input_file).getroot()
         
-        self.text_pattern = r"<text>(.*?)</text>"
-        self.mesh_pattern = r"<z:mesh.*?>(.*?)</z:mesh>"
-        self.id_pattern = r'\/MESH\/(.*?)\"'    
+        self.mesh_id_pattern = r'\/MESH\/(.*)'
+        self.namespace = {"z": "https://github.com/zbmed-semtec/whatizit-dictionary-ner/"}
 
-        self.read_file()
+        self.trans_dict = self.create_dict(verify_integrity)
 
-    def read_file(self) -> None:
-        """
-        Reads the file input
-        """
-        self.raw_text = ""
-
-        with open(self.input_file) as file:
-            self.raw_text = "".join([line.strip() for line in file.read().splitlines()])
-
-    def extract_mesh_id(self, tag: re.Match) -> str:
-        """
-        Translates the tag into its MeSH Id. If no MeSH Id is found, 
-        it returns the tagged word without any modification.
-
-        @type  tag: re.Match
-        @param tag: the matched pattern.
-
-        @rtype:     str
-        @return:    the MeSH id or the word itself
-        """
-        mesh_id = re.search(self.id_pattern, tag.group(0))
-        if(mesh_id):
-            return("MeSH" + mesh_id.group(1))
+    def extract_mesh_id(self, tag: ET.Element) -> str:
+        if tag.attrib.get("id"):
+            mesh_id = "MeSH" + re.search(self.mesh_id_pattern, tag.attrib.get("id")).group(1)
         else:
-            return(tag.group(1))
+            mesh_id = tag.text.strip()
+        return mesh_id
 
-    def translate(self) -> None: 
-        """
-        Translates the XML file. It loops through the content between "text" tag
-        in the XML file and extract both the tagged words and the untagged.
-        
-        The translated text is stored in "self.mod_text".
-        """
-        self.mod_text = ""
+    def create_dict(self, verify_integrity: bool = False) -> dict:
+        trans_dict = {}
 
-        text_splitted = re.findall(self.text_pattern, self.raw_text)
-        for ind_text in text_splitted:
-            tag_text = re.finditer(self.mesh_pattern, ind_text)
+        for tagged in self.root.findall("document/passage/text/z:mesh", self.namespace):
+            mesh_id = self.extract_mesh_id(tagged)
+            if not tagged.text in trans_dict.keys():
+                trans_dict[tagged.text] = mesh_id
+            else:
+                if verify_integrity and trans_dict[tagged.text] != mesh_id:
+                    print("ERROR")
+        return trans_dict
 
-            last_end_pos = 0
-            for tag in tag_text:
-                self.mod_text += (ind_text[last_end_pos:tag.start()])
-                self.mod_text += self.extract_mesh_id(tag)
-                last_end_pos = tag.end()
-            self.mod_text += (ind_text[last_end_pos:])
-            self.mod_text += " "
-        self.mod_text = self.mod_text.strip()
+    def translate(self) -> None:
+        self.tagged_texts = {}
+        self.mod_text = {}
 
-    def save_output(self, file_out: str) -> None:
-        """
-        Saves the translated file in the desired output file.
+        for passage in self.root.findall("document/passage"):
+            description = passage.find("infon").text.strip()
+            text = passage.find("text")
+            self.tagged_texts[description] = text
 
-        @type   file_out: str
-        @param  file_out: path for output text file
-        """
+            local_text = []
+            for concept in text.itertext():
+                local_text.append(self.trans_dict.get(concept.strip(), concept))
+            self.mod_text[description] = "".join(local_text).strip()
+
+    def output_text(self, split: int = 0) -> str:
+        if split == 0:
+            out_text = " ".join(self.mod_text.values())
+        else:
+            out_text = ""
+            for key, value in self.mod_text.items():
+                out_text += (key + ": " + value + "\n")
+        return out_text
+
+    def save_output(self, file_out: str, split: int = 0) -> None:
+        out_text = self.output_text(split)
+
         with open(file_out, "w+") as file:
-            file.write(self.mod_text)
-
-    def split_text(self) -> None:
-        """
-        Separates the whole text into title and abstract. Since the translation
-        algorithm joins every text found, it uses the "BACKGROUND" keyword as the
-        separator.
-        """
-        abstract_marker = "BACKGROUND: "
-
-        self.title = self.mod_text[:self.mod_text.find(abstract_marker)]
-        self.abstract = self.mod_text[self.mod_text.find(abstract_marker) + len(abstract_marker):]
+            file.write(out_text)
+    
+    def preprocess_text(self) -> None:
+        for key, value in self.mod_text.items():
+            # To Lowercase
+            value = value.lower()
+            
+            # Remove stopwords
+            value = remove_stopwords(value)
+            self.mod_text[key] = value
         
-        #conclusion_marker = "CONCLUSIONS: "
-        #results_maker = "RESULTS: "
-        #self.results = self.mod_text[self.mod_text.find(results_maker) + len(results_maker):self.mod_text.find(conclusion_marker)]
-        #self.conclusions = self.mod_text[self.mod_text.find(conclusion_marker) + len(conclusion_marker):]
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -102,7 +93,7 @@ if __name__ == "__main__":
         file_list = [os.path.join(args.indir, file) for file in os.listdir(args.indir) if file.endswith("xml")]
 
         file_out = [file[:file.find(".xml")] + "_translated.xml" for file in os.listdir(args.indir) if file.endswith("xml")]
-        directory = args.output if args.output else args.indir.strip("/") + "_translated"
+        directory = args.output if args.output else args.indir.strip("/") + "_translated_v2"
         file_out = [os.path.join(directory, file) for file in file_out]
         
         if not os.path.exists(directory) : os.mkdir(directory)
@@ -111,6 +102,7 @@ if __name__ == "__main__":
         file_out = [args.output] if args.output else [args.input[:args.input.rfind(".xml")] + "_translated.xml"]
 
     for i, file in enumerate(file_list):
+        print(file)
         xml_translation = XMLtrans(file)
         xml_translation.translate()
         xml_translation.save_output(file_out[i])

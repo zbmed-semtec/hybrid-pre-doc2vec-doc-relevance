@@ -1,24 +1,26 @@
 <?xml version='1.0' encoding='utf-8'?>
-<collection>
+<collection xmlns:z="https://github.com/zbmed-semtec/whatizit-dictionary-ner/">
 <document>
 <id>
-   19694997
-  </id>
+19694997
+</id>
 <passage>
 <infon key="type">
-    title
-   </infon>
+title
+</infon>
 <offset>
-    0
-   </offset>
-   <text>
+0
+</offset>
+<text>
 Final test of <z:mesh cui="C1640380, C4551909, C3494180, C4552764, C3178845, C4704950, C4704951, C4704952, C1257975, C3178844" id="http://purl.bioontology.org/ontology/MESH/A012345" semantics="http://purl.bioontology.org/ontology/STY/T025">example</z:mesh> to see if <z:mesh cui="C0039798" id="http://purl.bioontology.org/ontology/MESH/Q000628" semantics="http://purl.bioontology.org/ontology/STY/T169">can extract everthing</z:mesh>.
 </text>
+</passage>
+<passage>
 <infon key="type">
-    abstract
-   </infon>
+abstract
+</infon>
 <text>
-Also testing the joining of different <z:mesh cui="" id="http://purl.bioontology.org/ontology/STY/T008" semantics="">information (should not be translated)</z:mesh>.
+Also testing the joining of different <z:mesh cui="" semantics="">information (should not be translated)</z:mesh>.
 </text>
 </passage>
 </document>

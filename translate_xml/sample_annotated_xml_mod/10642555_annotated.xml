@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<collection xmlns:z="https://github.com/zbmed-semtec/whatizit-dictionary-ner/">
+<document>
+<id>
+   10642555
+  </id>
+<passage>
+<infon key="type">
+    title
+   </infon>
+<offset>
+    0
+   </offset>
+<text>
+    Rad6-dependent <z:mesh cui="C1519751" id="http://purl.bioontology.org/ontology/MESH/D054875" semantics="http://purl.bioontology.org/ontology/STY/T044">ubiquitination</z:mesh> of <z:mesh cui="C0019646, C0019650, C0086411, C0086412, C0019647, C0019648, C0019645, C0019649, C0019652, C0019644" id="http://purl.bioontology.org/ontology/MESH/D006657" semantics="http://purl.bioontology.org/ontology/STY/T123, http://purl.bioontology.org/ontology/STY/T116">histone</z:mesh> H2B in <z:mesh cui="C0043393" id="http://purl.bioontology.org/ontology/MESH/D015003" semantics="http://purl.bioontology.org/ontology/STY/T004">yeast</z:mesh>.
+   </text>
+</passage>
+<passage>
+<infon key="type">
+    abstract
+   </infon>
+<offset>
+    55
+   </offset>
+<text>
+    Although ubiquitinated <z:mesh cui="C0019646, C0019650, C0086411, C0086412, C0019647, C0019648, C0019645, C0019649, C0019652, C0019644" id="http://purl.bioontology.org/ontology/MESH/D006657" semantics="http://purl.bioontology.org/ontology/STY/T123, http://purl.bioontology.org/ontology/STY/T116">histones</z:mesh> are present in substantial levels in <z:mesh cui="C0042567" id="http://purl.bioontology.org/ontology/MESH/D014714" semantics="http://purl.bioontology.org/ontology/STY/T010">vertebrate</z:mesh> <z:mesh cui="C0007634" id="http://purl.bioontology.org/ontology/MESH/D002477" semantics="http://purl.bioontology.org/ontology/STY/T025">cells</z:mesh>, the <z:mesh cui="C0035820, C0086939" id="http://purl.bioontology.org/ontology/MESH/D012380" semantics="http://purl.bioontology.org/ontology/STY/T078, http://purl.bioontology.org/ontology/STY/T054">roles</z:mesh> they <z:mesh cui="C0032214, C0032215, C0040565, C0034125, C0080031" id="http://purl.bioontology.org/ontology/MESH/D010988" semantics="http://purl.bioontology.org/ontology/STY/T073, http://purl.bioontology.org/ontology/STY/T056">play</z:mesh> in specific <z:mesh cui="C3714634, C0005520" id="http://purl.bioontology.org/ontology/MESH/D001686" semantics="http://purl.bioontology.org/ontology/STY/T038, http://purl.bioontology.org/ontology/STY/T070">biological processes</z:mesh> and the cellular factors that regulate this modification are not well characterized. Ubiquitinated H2B (uH2B) has been identified in the <z:mesh cui="C0043393" id="http://purl.bioontology.org/ontology/MESH/D015003" semantics="http://purl.bioontology.org/ontology/STY/T004">yeast</z:mesh> <z:mesh cui="C0036025" id="http://purl.bioontology.org/ontology/MESH/D012441" semantics="http://purl.bioontology.org/ontology/STY/T004">Saccharomyces cerevisiae</z:mesh>, and <z:mesh cui="C0026882" id="http://purl.bioontology.org/ontology/MESH/D009154" semantics="http://purl.bioontology.org/ontology/STY/T045">mutation</z:mesh> of the conserved <z:mesh cui="C1519751" id="http://purl.bioontology.org/ontology/MESH/D054875" semantics="http://purl.bioontology.org/ontology/STY/T044">ubiquitination</z:mesh> site is shown to <z:mesh cui="C0107156, C0126122, C0132187, C0146604, C1691769, C0132836, C0126180, C0146854, C0132121, C0126119, C0110580, C1260235, C0103413, C0149479, C0132848, C0146701, C0116660, C0283411, C0107153, C0134126, C0132837, C0106342, C0144272, C0138387, C0142182, C5441759, C0142186, C0134300" id="http://purl.bioontology.org/ontology/MESH/C020416" semantics="http://purl.bioontology.org/ontology/STY/T125, http://purl.bioontology.org/ontology/STY/T109, http://purl.bioontology.org/ontology/STY/T121">confer</z:mesh> <z:mesh cui="C0243070, C0243069, C0000769, C1527361, C0243066, C0000846, C0220810, C0334079, C0243067" id="http://purl.bioontology.org/ontology/MESH/Q000002" semantics="http://purl.bioontology.org/ontology/STY/T046, http://purl.bioontology.org/ontology/STY/T080, http://purl.bioontology.org/ontology/STY/T169, http://purl.bioontology.org/ontology/STY/T019">defects</z:mesh> in mitotic <z:mesh cui="C0007634" id="http://purl.bioontology.org/ontology/MESH/D002477" semantics="http://purl.bioontology.org/ontology/STY/T025">cell</z:mesh> <z:mesh cui="C0243107, C1135598, C1457898, C0220844, C0243109" id="http://purl.bioontology.org/ontology/MESH/Q000254" semantics="http://purl.bioontology.org/ontology/STY/T169, http://purl.bioontology.org/ontology/STY/T040, http://purl.bioontology.org/ontology/STY/T039, http://purl.bioontology.org/ontology/STY/T033">growth</z:mesh> and <z:mesh cui="C0025186, C1450045" id="http://purl.bioontology.org/ontology/MESH/D008540" semantics="http://purl.bioontology.org/ontology/STY/T043">meiosis</z:mesh>. uH2B was not detected in rad6 mutants, which are defective for the <z:mesh cui="C0386602, C0084913" id="http://purl.bioontology.org/ontology/MESH/D044763" semantics="http://purl.bioontology.org/ontology/STY/T126, http://purl.bioontology.org/ontology/STY/T116">ubiquitin-conjugating enzyme</z:mesh> Ubc2, thus identifying Rad6 as the major cellular activity that ubiquitinates H2B in <z:mesh cui="C0043393" id="http://purl.bioontology.org/ontology/MESH/D015003" semantics="http://purl.bioontology.org/ontology/STY/T004">yeast</z:mesh>.
+   </text>
+</passage>
+</document>
+</collection>
