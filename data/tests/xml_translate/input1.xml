@@ -1,0 +1,12 @@
+<collection xmlns:z="https://github.com/zbmed-semtec/whatizit-dictionary-ner/">
+<document>
+<passage>
+<infon key="type">
+title
+</infon>
+<text>
+This text should not be modified.
+</text>
+</passage>
+</document>
+</collection>

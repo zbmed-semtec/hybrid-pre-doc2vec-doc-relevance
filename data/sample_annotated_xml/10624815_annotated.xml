@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<collection xmlns:z="https://github.com/zbmed-semtec/whatizit-dictionary-ner/">
+<document>
+<id>
+   10624815
+  </id>
+<passage>
+<infon key="type">
+    title
+   </infon>
+<offset>
+    0
+   </offset>
+<text>
+<z:mesh cui="C0003591" id="http://purl.bioontology.org/ontology/MESH/D001053" semantics="http://purl.bioontology.org/ontology/STY/T123, http://purl.bioontology.org/ontology/STY/T116">Apolipoprotein</z:mesh> E polymorphisms and <z:mesh cui="C0030567" id="http://purl.bioontology.org/ontology/MESH/D010300" semantics="http://purl.bioontology.org/ontology/STY/T047">Parkinson's disease</z:mesh>.
+   </text>
+</passage>
+<passage>
+<infon key="type">
+    abstract
+   </infon>
+<offset>
+    56
+   </offset>
+<text>
+    The <z:mesh cui="C0003591" id="http://purl.bioontology.org/ontology/MESH/D001053" semantics="http://purl.bioontology.org/ontology/STY/T123, http://purl.bioontology.org/ontology/STY/T116">apolipoprotein</z:mesh> E (APOE) <z:mesh cui="C0032529" id="http://purl.bioontology.org/ontology/MESH/D011110" semantics="http://purl.bioontology.org/ontology/STY/T045">gene polymorphism</z:mesh> has been studied in <z:mesh cui="C0030567" id="http://purl.bioontology.org/ontology/MESH/D010300" semantics="http://purl.bioontology.org/ontology/STY/T047">Parkinson's disease</z:mesh> (PD) with conflicting results. Recently, a newly described functional polymorphism in the <z:mesh cui="C0034987" id="http://purl.bioontology.org/ontology/MESH/D012045" semantics="http://purl.bioontology.org/ontology/STY/T123, http://purl.bioontology.org/ontology/STY/T114">regulatory region</z:mesh> of the APOE <z:mesh cui="C0017337, C0440471, C0008844" id="http://purl.bioontology.org/ontology/MESH/D005796" semantics="http://purl.bioontology.org/ontology/STY/T028">gene</z:mesh>, (-491 A/T), has been associated with late-onset <z:mesh cui="C0750900, C0494463, C0276496, C0546126, C0011265, C0750901, C0002395" id="http://purl.bioontology.org/ontology/MESH/D000544" semantics="http://purl.bioontology.org/ontology/STY/T047, http://purl.bioontology.org/ontology/STY/T048">Alzheimer's disease</z:mesh>. We studied the <z:mesh cui="C0004083" id="http://purl.bioontology.org/ontology/MESH/D001244" semantics="http://purl.bioontology.org/ontology/STY/T041">association</z:mesh> between these two polymorphisms of the APOE <z:mesh cui="C0017337, C0440471, C0008844" id="http://purl.bioontology.org/ontology/MESH/D005796" semantics="http://purl.bioontology.org/ontology/STY/T028">gene</z:mesh> with PD in a sample of 126 PD <z:mesh cui="C0030705, C0008942" id="http://purl.bioontology.org/ontology/MESH/D010361" semantics="http://purl.bioontology.org/ontology/STY/T101, http://purl.bioontology.org/ontology/STY/T096">patients</z:mesh> and in 119 <z:mesh cui="C0033107, C2700409, C0243148" id="http://purl.bioontology.org/ontology/MESH/Q000517" semantics="http://purl.bioontology.org/ontology/STY/T080">controls</z:mesh> from the same geographic background. Allelic and genotypic <z:mesh cui="C0243130, C0376249, C0220920, C0220823, C0220880, C0243132, C0220856, C0220900, C0014508, C0220888" id="http://purl.bioontology.org/ontology/MESH/Q000453" semantics="http://purl.bioontology.org/ontology/STY/T079, http://purl.bioontology.org/ontology/STY/T169, http://purl.bioontology.org/ontology/STY/T081, http://purl.bioontology.org/ontology/STY/T170">frequencies</z:mesh> were not different between PD cases and <z:mesh cui="C0011291, C0032678, C0032662, C0032679" id="http://purl.bioontology.org/ontology/MESH/D011155" semantics="http://purl.bioontology.org/ontology/STY/T058, http://purl.bioontology.org/ontology/STY/T078, http://purl.bioontology.org/ontology/STY/T080, http://purl.bioontology.org/ontology/STY/T090">population controls</z:mesh> for either the APOE or -491 A/T polymorphism. The <z:mesh cui="C0206132" id="http://purl.bioontology.org/ontology/MESH/D017668" semantics="http://purl.bioontology.org/ontology/STY/T081">age at onset</z:mesh> of the <z:mesh cui="C0012634" id="http://purl.bioontology.org/ontology/MESH/D004194" semantics="http://purl.bioontology.org/ontology/STY/T047">disease</z:mesh> was not different according to the specific <z:mesh cui="C3661526, C0017431" id="http://purl.bioontology.org/ontology/MESH/D005838" semantics="http://purl.bioontology.org/ontology/STY/T032">genotypes</z:mesh> of the two polymorphisms of the APOE <z:mesh cui="C0017337, C0440471, C0008844" id="http://purl.bioontology.org/ontology/MESH/D005796" semantics="http://purl.bioontology.org/ontology/STY/T028">gene</z:mesh>.
+   </text>
+</passage>
+</document>
+</collection>
