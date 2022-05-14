@@ -4,7 +4,7 @@ This tutorial aims to explain how to translate from annotated XML files obtained
 
 # Prerequisites
 
-1. Annotated XML files. On how to obtain them, please follow instructuions [here](https://github.com/zbmed-semtec/whatizit-dictionary-ner/tree/main/docs).
+1. Annotated XML files. On how to obtain them, please follow instructions  [here](https://github.com/zbmed-semtec/whatizit-dictionary-ner/tree/main/docs).
 
 # Steps
 
@@ -93,7 +93,7 @@ Optionally, the output file/directory argument can be used to specify where shou
 
 * If a directory is provided, it will create a new directory with the same name but adding `_translated` to it.
 
-An example of the command that will create the direcortory `sample_annotated_xml_translated`:
+An example of the command that will create the directory  `sample_annotated_xml_translated`:
 
 ```bash
 python xml_translate.py -d sample_annotated_xml
@@ -191,11 +191,11 @@ The MeSHQ000706 of biomedicine, complementary and MeSHD000529, and MeSHD008519 f
 
 ## Decisions:
 
-* I use the `xml.etree` library as it is one the most used XML parsers and provided all the functionality required. I also tried using regular expression directly on the text itself, but it proved to be less efficient and harder to handle errors.
+* I use the `xml.etree` library as it is one of the most used XML parsers and provided all the functionality required. I also tried using regular expression directly on the text itself, but it proved to be less efficient and harder to handle errors.
 
 * Why to create a dictionary? Mainly for two reasons:
 
-    1. To validate the annotated XML files since every "concept" should have the same MeSH ID. By having a dictionary, I can ensure that the `z:mesh` tags are consistent with each other. 
+    1. To validate the annotated XML files, since every "concept" should have the same MeSH ID. By having a dictionary, I can ensure that the `z:mesh` tags are consistent with each other. 
     
     2. To facilitate the text translation. To avoid using regular expressions in the text to find the tags, I combined the functionality of the method `itertext()` from `xml.etree` and the dictionary to find a less prone to error solutions.
 
@@ -205,7 +205,7 @@ The MeSHQ000706 of biomedicine, complementary and MeSHD000529, and MeSHD008519 f
 
 * Improve error handling process. At the moment, if the XML file does not match the necessary structure, there is no indication to where the error is or how to deal with it.
 
-* Consider adding multiprocessing. There are around 200.000 documents, which takes around a minute and a half to execute. Multiprocessing functionality could be useful since the translation process is done one file at a time and it should be easily parallelizable.
+* Consider adding multiprocessing. There are around 200.000 documents, which takes around a minute and a half to execute. Multiprocessing functionality could be useful since the translation process is done one file at a time, and it should be easily parallelizable.
 
 **REMOVE THIS LINE BEFORE FINAL VERSION COMMIT**
 
@@ -215,5 +215,5 @@ The MeSHQ000706 of biomedicine, complementary and MeSHD000529, and MeSHD008519 f
 ```
 
     [NbConvertApp] Converting notebook tutorial_xml_translate.ipynb to markdown
-    [NbConvertApp] Writing 16672 bytes to README.md
+    [NbConvertApp] Writing 8070 bytes to README.md
 

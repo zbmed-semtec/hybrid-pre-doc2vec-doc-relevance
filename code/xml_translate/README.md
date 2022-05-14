@@ -2,7 +2,7 @@
 
 ## What it does
 
-This file aims transforms an annotated XML files obtained from [Whatizit](https://github.com/zbmed-semtec/whatizit-dictionary-ner) to plain text. The translation converts the tagged concepts by the dictionary to its corresponding MeSH ID.
+This file aims to transform an annotated XML files obtained from [Whatizit](https://github.com/zbmed-semtec/whatizit-dictionary-ner) to plain text. The translation converts the tagged concepts by the dictionary to its corresponding MeSH ID.
 
 A more detailed tutorial can be found in [`docs/xml_translate`](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/blob/main/docs/xml_translate/tutorial_xml_translate.ipynb)
 
@@ -94,10 +94,10 @@ Optionally, the output file/directory argument can be used to specify where shou
 
 * If a directory is provided, it will create a new directory with the same name but adding `_translated` to it.
 
-An example of the command that will create the direcortory `sample_annotated_xml_translated`:
+An example of the command that will create the directory  `sample_annotated_xml_translated`:
 
 ```bash
 python xml_translate.py -d sample_annotated_xml
 ```
 
-In the folder `code/tests`, a file containing unittest can be found.
+In `code/tests` folder, a file containing unittest can be found.
