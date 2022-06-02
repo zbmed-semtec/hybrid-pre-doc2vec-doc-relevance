@@ -1,2 +1,30 @@
-title: Presynaptic Ca(2+) influx at a MeSHD051379 central MeSHD013569 with Ca(2+) channel subunit MeSHD009154.
-abstract: Genetic alterations in Ca(2+) channel subunits can be used to study the interaction among channel subunits and their MeSHD012380 in channel MeSHQ000502. P/Q- and N-type Ca(2+) channels reside at the MeSHD017729 and MeSHQ000517 the release of MeSHD018377 at mammalian central MeSHD013569. We used MeSHD061848 MeSHQ000379 to investigate presynaptic Ca(2+) currents and MeSHD018377 release at hippocampal MeSHD006624 MeSHD013569 in both tottering (tg, alpha(1A) subunit) and lethargic (lh, beta(4) subunit) mutant MeSHD051379. Application of selective toxins revealed a large reduction in presynaptic P/Q-type Ca(2+) MeSHD014171, from 39% of total in +/+ MeSHD051379 to 6% in tg/tg MeSHD051379, whereas the proportion of N-type increased from 35 to 68%, respectively. MeSHD018377 release in the tg/tg mutant relied almost exclusively on N-type channels, as shown by the complete blockade of MeSHD009435 with MeSHD020866. Remarkably, loss of beta4, a subunit predicted to regulate the subcellular targeting and modulation of both P/Q- and N-type channels, resulted in no significant difference in the ratio of Ca(2+) channel subtypes or Ca(2+) dependence of MeSHD018377 release in lethargic MeSHD051379. MeSHD019204-mediated inhibition of Ca(2+) channels was also unaltered. These results indicate that a profound decrease in presynaptic P/Q-type currents MeSHD007854 to dependence of MeSHD018377 release on N-type channels. In contrast, absence of beta(4) appears not to compromise either P/Q- or N-type channel MeSHQ000502 at this hippocampal MeSHD013569, implicating rescue of presynaptic Ca(2+) currents by other available beta subunits. The present study reveals compensatory molecular mechanisms in the MeSHD012926 of presynaptic Ca(2+) entry and MeSHD018377 release.
+<?xml version='1.0' encoding='utf-8'?>
+<collection>
+<document>
+<id>
+   10627593
+  </id>
+<passage>
+<infon key="type">
+    title
+   </infon>
+<offset>
+    0
+   </offset>
+<text>
+Presynaptic Ca(2+) influx at a MeSHD051379 central MeSHD013569 with Ca(2+) channel subunit MeSHD009154.
+</text>
+</passage>
+<passage>
+<infon key="type">
+    abstract
+   </infon>
+<offset>
+    92
+   </offset>
+<text>
+Genetic alterations in Ca(2+) channel subunits can be used to study the interaction among channel subunits and their MeSHD012380 in channel MeSHQ000502. P/Q- and N-type Ca(2+) channels reside at the MeSHD017729 and MeSHQ000517 the release of MeSHD018377 at mammalian central MeSHD013569. We used MeSHD061848 MeSHQ000379 to investigate presynaptic Ca(2+) currents and MeSHD018377 release at hippocampal MeSHD006624 MeSHD013569 in both tottering (tg, alpha(1A) subunit) and lethargic (lh, beta(4) subunit) mutant MeSHD051379. Application of selective toxins revealed a large reduction in presynaptic P/Q-type Ca(2+) MeSHD014171, from 39% of total in +/+ MeSHD051379 to 6% in tg/tg MeSHD051379, whereas the proportion of N-type increased from 35 to 68%, respectively. MeSHD018377 release in the tg/tg mutant relied almost exclusively on N-type channels, as shown by the complete blockade of MeSHD009435 with MeSHD020866. Remarkably, loss of beta4, a subunit predicted to regulate the subcellular targeting and modulation of both P/Q- and N-type channels, resulted in no significant difference in the ratio of Ca(2+) channel subtypes or Ca(2+) dependence of MeSHD018377 release in lethargic MeSHD051379. MeSHD019204-mediated inhibition of Ca(2+) channels was also unaltered. These results indicate that a profound decrease in presynaptic P/Q-type currents MeSHD007854 to dependence of MeSHD018377 release on N-type channels. In contrast, absence of beta(4) appears not to compromise either P/Q- or N-type channel MeSHQ000502 at this hippocampal MeSHD013569, implicating rescue of presynaptic Ca(2+) currents by other available beta subunits. The present study reveals compensatory molecular mechanisms in the MeSHD012926 of presynaptic Ca(2+) entry and MeSHD018377 release.
+</text>
+</passage>
+</document>
+</collection>

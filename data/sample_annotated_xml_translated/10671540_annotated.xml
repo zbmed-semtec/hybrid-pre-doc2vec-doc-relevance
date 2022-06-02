@@ -1,2 +1,30 @@
-title: The regulatory beta subunit of MeSHD047390 mediates formation of tetrameric CK2 complexes.
-abstract: MeSHD047390 is a tetrameric MeSHD004798 composed of two catalytic (alpha and/or alpha') subunits and two regulatory (beta) subunits. Because CK2beta is synthesized in excess of CK2alpha, we hypothesized that formation of CK2beta homodimers precedes the incorporation of the MeSHD020134 of CK2 into complexes. To test this hypothesis, we cotransfected MeSHD002477 with two MeSHD000939-tagged variants of CK2beta. The results of these cotransfection studies demonstrate that interactions between two CK2beta subunits take place in the absence of CK2alpha. Together with results from previous biosynthetic labeling studies, these results suggest that formation of CK2beta homodimers occurs before incorporation of MeSHD020134 of CK2 into CK2 complexes. We also cotransfected Cos-7 MeSHD002477 with a deletion fragment of CK2beta (i.e. Myc-beta1-166) together with full-length MeSHD006388 (HA)-tagged CK2beta and/or CK2alpha'. Although complexes between Myc-beta1-166 and HA-beta were readily detected, we obtained no evidence of direct interactions between Myc-beta1-166 and HA-CK2alpha'. These results suggest that residues within the N-terminal 166 MeSHD000596 of CK2beta are sufficient for interactions between CK2beta subunits, whereas the C-terminal domain of CK2beta is required for complex formation with the MeSHD020134 of CK2. Finally, we observed that expression of full-length HA-beta promotes MeSHD010766 of Myc-beta1-166 by HA-CK2alpha'.
+<?xml version='1.0' encoding='utf-8'?>
+<collection>
+<document>
+<id>
+   10671540
+  </id>
+<passage>
+<infon key="type">
+    title
+   </infon>
+<offset>
+    0
+   </offset>
+<text>
+The regulatory beta subunit of MeSHD047390 mediates formation of tetrameric CK2 complexes.
+</text>
+</passage>
+<passage>
+<infon key="type">
+    abstract
+   </infon>
+<offset>
+    98
+   </offset>
+<text>
+MeSHD047390 is a tetrameric MeSHD004798 composed of two catalytic (alpha and/or alpha') subunits and two regulatory (beta) subunits. Because CK2beta is synthesized in excess of CK2alpha, we hypothesized that formation of CK2beta homodimers precedes the incorporation of the MeSHD020134 of CK2 into complexes. To test this hypothesis, we cotransfected MeSHD002477 with two MeSHD000939-tagged variants of CK2beta. The results of these cotransfection studies demonstrate that interactions between two CK2beta subunits take place in the absence of CK2alpha. Together with results from previous biosynthetic labeling studies, these results suggest that formation of CK2beta homodimers occurs before incorporation of MeSHD020134 of CK2 into CK2 complexes. We also cotransfected Cos-7 MeSHD002477 with a deletion fragment of CK2beta (i.e. Myc-beta1-166) together with full-length MeSHD006388 (HA)-tagged CK2beta and/or CK2alpha'. Although complexes between Myc-beta1-166 and HA-beta were readily detected, we obtained no evidence of direct interactions between Myc-beta1-166 and HA-CK2alpha'. These results suggest that residues within the N-terminal 166 MeSHD000596 of CK2beta are sufficient for interactions between CK2beta subunits, whereas the C-terminal domain of CK2beta is required for complex formation with the MeSHD020134 of CK2. Finally, we observed that expression of full-length HA-beta promotes MeSHD010766 of Myc-beta1-166 by HA-CK2alpha'.
+</text>
+</passage>
+</document>
+</collection>

@@ -1,2 +1,30 @@
-title: Potential involvement of FRS2 in MeSHD007328 signaling.
-abstract: Shp-2 is implicated in several MeSHD020794 signaling pathways. This MeSHD017027 is composed of a MeSHD020134 in its C-terminus and two MeSHD018909 in its N-terminus. Shp-2 becomes activated upon binding through one or both MeSHD018909 to MeSHD014443 phosphorylated molecules such as Shc or MeSHD011972 substrates. We were interested in finding a new molecule(s), MeSHD014443 phosphorylated by the MeSHD011972 (IR), that could interact with Shp-2. To do so, we screened a MeSHD006801 MeSHD010920 MeSHD018076 (MeSHD018076) MeSHD007990 with the MeSHD018909-containing part of Shp-2 using a modified MeSHD020798. In this system we induce or repress the expression of a constitutive active IR beta-subunit. When expressed, IR phosphorylates MeSHD011506 produced from the MeSHD007990 that can then associate with Shp-2. Using this approach, we isolated FRS2 as a potential target for MeSHD014443 MeSHD010766 by the IR. After MeSHD019976 the entire MeSHD018076, we found that 1) in the MeSHD020798, FRS2 interacts with Shp-2 in a fashion dependent on the presence of the IR; and 2) in the PC12/IR MeSHD002460, MeSHD007328 MeSHD007854 to an increase in FRS2 MeSHD001244 with the MeSHD010744. We next wanted to determine whether FRS2 could be a direct substrate for IR. In an MeSHD066298 MeSHD010770 MeSHQ000032 we found that MeSHD014909-purified IR phosphorylates MeSHD005982-FRS2 fusion MeSHD011506. Finally, in intact MeSHD002477 we show that MeSHD007328 stimulates MeSHD014443 MeSHD010766 of endogenous FRS2. In summary, by MeSHQ000175 a two-MeSHD002678 MeSHD015723, we have isolated FRS2 as a possible substrate for IR. We found that IR can directly phosphorylate FRS2. Moreover, in intact MeSHD002477 MeSHD007328 stimulates MeSHD014443 MeSHD010766 of FRS2 and its subsequent MeSHD001244 with Shp-2. Taken together these results suggest that FRS2 could participate in MeSHD007328 signaling by recruiting Shp-2 and, hence, could MeSHQ000502 as a docking molecule similar to MeSHD055504.
+<?xml version='1.0' encoding='utf-8'?>
+<collection>
+<document>
+<id>
+   10650943
+  </id>
+<passage>
+<infon key="type">
+    title
+   </infon>
+<offset>
+    0
+   </offset>
+<text>
+Potential involvement of FRS2 in MeSHD007328 signaling.
+</text>
+</passage>
+<passage>
+<infon key="type">
+    abstract
+   </infon>
+<offset>
+    52
+   </offset>
+<text>
+Shp-2 is implicated in several MeSHD020794 signaling pathways. This MeSHD017027 is composed of a MeSHD020134 in its C-terminus and two MeSHD018909 in its N-terminus. Shp-2 becomes activated upon binding through one or both MeSHD018909 to MeSHD014443 phosphorylated molecules such as Shc or MeSHD011972 substrates. We were interested in finding a new molecule(s), MeSHD014443 phosphorylated by the MeSHD011972 (IR), that could interact with Shp-2. To do so, we screened a MeSHD006801 MeSHD010920 MeSHD018076 (MeSHD018076) MeSHD007990 with the MeSHD018909-containing part of Shp-2 using a modified MeSHD020798. In this system we induce or repress the expression of a constitutive active IR beta-subunit. When expressed, IR phosphorylates MeSHD011506 produced from the MeSHD007990 that can then associate with Shp-2. Using this approach, we isolated FRS2 as a potential target for MeSHD014443 MeSHD010766 by the IR. After MeSHD019976 the entire MeSHD018076, we found that 1) in the MeSHD020798, FRS2 interacts with Shp-2 in a fashion dependent on the presence of the IR; and 2) in the PC12/IR MeSHD002460, MeSHD007328 MeSHD007854 to an increase in FRS2 MeSHD001244 with the MeSHD010744. We next wanted to determine whether FRS2 could be a direct substrate for IR. In an MeSHD066298 MeSHD010770 MeSHQ000032 we found that MeSHD014909-purified IR phosphorylates MeSHD005982-FRS2 fusion MeSHD011506. Finally, in intact MeSHD002477 we show that MeSHD007328 stimulates MeSHD014443 MeSHD010766 of endogenous FRS2. In summary, by MeSHQ000175 a two-MeSHD002678 MeSHD015723, we have isolated FRS2 as a possible substrate for IR. We found that IR can directly phosphorylate FRS2. Moreover, in intact MeSHD002477 MeSHD007328 stimulates MeSHD014443 MeSHD010766 of FRS2 and its subsequent MeSHD001244 with Shp-2. Taken together these results suggest that FRS2 could participate in MeSHD007328 signaling by recruiting Shp-2 and, hence, could MeSHQ000502 as a docking molecule similar to MeSHD055504.
+</text>
+</passage>
+</document>
+</collection>

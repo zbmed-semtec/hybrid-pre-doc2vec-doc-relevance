@@ -94,10 +94,14 @@ Optionally, the output file/directory argument can be used to specify where shou
 
 * If a directory is provided, it will create a new directory with the same name but adding `_translated` to it.
 
+If you wish to output to a .TSV file, set the following argument to 1:
+
+* --tsv: default 0
+
 An example of the command that will create the directory  `sample_annotated_xml_translated`:
 
 ```bash
-python xml_translate.py -d sample_annotated_xml
+python xml_translate.py --indir ../../data/sample_annotated_xml
 ```
 
 In `code/tests` folder, a file containing unittest can be found.
