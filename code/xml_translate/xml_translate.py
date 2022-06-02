@@ -15,7 +15,7 @@ Notes
 A more detailed tutorial can be found in
 [`docs/xml_translate`](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/blob/main/docs/xml_translate/tutorial_xml_translate.ipynb)
 """
-__version__ = "0.3"
+__version__ = "0.3.1"
 __author__ = "Guillermo Rocamora Pérez"
 
 import os
@@ -141,9 +141,10 @@ class XMLtrans:
         str
             PMID of the publication.
         """
-        if not self.root.find("document/id"):
+        if self.root.find("document/id") is None:
             logging.warning("No PMID was found in the document. Defaults to 0")
             return 0
+
         return self.root.find("document/id").text.strip()
 
     def extract_mesh_id(self, tag: ET.Element) -> str:
@@ -306,6 +307,10 @@ def translate_pipeline(files_in: List[str], output_file: str) -> pd.DataFrame:
         Generated pandas dataframe containing three columns: "PMID", "title"
         and "abstract".
     """
+    if not output_file:
+        # "../../data/sample_annotated_xml_translated/18394048_annotated.xml"
+        output_file = files_in[0][0:files_in[0].rfind("/")]
+
     if not output_file.endswith(".tsv"):
         output_file = output_file + ".tsv"
     publications_list = []
