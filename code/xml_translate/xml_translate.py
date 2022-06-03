@@ -277,12 +277,9 @@ class XMLtrans:
             Whether to split the output text it title/abstract, by default
             False.
         """
-        if not split:
-            out_text = " ".join(self.mod_text.values())
-        else:
-            out_text = ""
-            for key, value in self.mod_text.items():
-                out_text += key + ": " + value + "\n"
+        if not file_out.endswith(".txt"): file_out += ".txt"
+
+        out_text = self.output_text(split)
 
         with open(file_out, "w+") as file:
             file.write(out_text)

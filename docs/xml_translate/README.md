@@ -4,7 +4,7 @@ This tutorial aims to explain how to translate from annotated XML files obtained
 
 # Prerequisites
 
-1. Annotated XML files. On how to obtain them, please follow instructions  [here](https://github.com/zbmed-semtec/whatizit-dictionary-ner/tree/main/docs).
+1. Annotated XML files. On how to obtain them, please follow instructions [here](https://github.com/zbmed-semtec/whatizit-dictionary-ner/tree/main/docs).
 
 # Steps
 
@@ -17,21 +17,21 @@ Import the necessary class to process the files:
 import sys
 sys.path.append('../../code/xml_translate/')
 
-from xml_translate import XMLtrans
+from xml_translate import XMLtrans, translate_pipeline
 ```
 
 ## Step 2:
 
-Define the input and output paths. Creates the output directory if needed:
+Define the input and output paths. Creates the output directory if needed. We will also export the articles to a .TSV file, so indicate the path as well.
 
 
 ```python
 import os
 input_path = "../../data/sample_annotated_xml"
 output_path = "../../data/sample_annotated_xml_translated"
+output_tsv = "../../data/sample_annotated_xml.tsv"
 
 if not os.path.isdir(output_path): os.mkdir(output_path)
-
 ```
 
 Given the directory path, two lists containing the input and output files are created.
@@ -53,14 +53,174 @@ Loop through the input files. For each input, it creates a `XMLtrans` object and
 for i, file in enumerate(input_files):
     xml_translation = XMLtrans(file)
     xml_translation.translate()
-    xml_translation.save_output(output_files[i], split = True)
+    xml_translation.save_xml(output_files[i])
 ```
+
+To export every XML file to a single TSV, run the pipeline function:
+
+
+```python
+translate_pipeline(input_files, output_tsv)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PMID</th>
+      <th>title</th>
+      <th>abstract</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>18394048</td>
+      <td>Effect of MeSHD000077287 on MeSHD000071080: a ...</td>
+      <td>BACKGROUND AND PURPOSE: We studied the effect ...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>18363035</td>
+      <td>A MeSHD016678-wide MeSHD046228 reveals anti-in...</td>
+      <td>OBJECTIVE: Paeony root has long been used for ...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>18366698</td>
+      <td>The MeSHQ000706 of biomedicine, complementary ...</td>
+      <td>BACKGROUND: Studies have shown that a signific...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>10627593</td>
+      <td>Presynaptic Ca(2+) influx at a MeSHD051379 cen...</td>
+      <td>Genetic alterations in Ca(2+) channel subunits...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>10642555</td>
+      <td>Rad6-dependent MeSHD054875 of MeSHD006657 H2B ...</td>
+      <td>Although ubiquitinated MeSHD006657 are present...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>10609551</td>
+      <td>Individual variation in the expression profile...</td>
+      <td>MeSHD009538 evokes dose-dependent and often va...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>18401010</td>
+      <td>MeSHD006224 MeSHD013075: MeSHD012380 of MeSHD0...</td>
+      <td>Recently, we demonstrated that MeSHD019289 MeS...</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>18370348</td>
+      <td>[MeSHD009369 search with MeSHD004058-weighted ...</td>
+      <td>PURPOSE: Assessment of fat-suppressing MeSHD00...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>10605405</td>
+      <td>Ki-67, oestrogen receptor, and MeSHD011980 MeS...</td>
+      <td>AIM: To examine proliferative activity using t...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>10629618</td>
+      <td>MeSHD006360 associated with MeSHD004260 MeSHD0...</td>
+      <td>Two MeSHD004798 of MeSHD004260 (BER), MeSHD051...</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>18369322</td>
+      <td>Absence of retroviral vector-mediated transfor...</td>
+      <td>There is considerable concern regarding the tr...</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>10624815</td>
+      <td>MeSHD001053 E polymorphisms and MeSHD010300.</td>
+      <td>The MeSHD001053 E (APOE) MeSHD011110 has been ...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>10650943</td>
+      <td>Potential involvement of FRS2 in MeSHD007328 s...</td>
+      <td>Shp-2 is implicated in several MeSHD020794 sig...</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>18393066</td>
+      <td>Producing MeSHD056804 using whole-MeSHD002477 ...</td>
+      <td>This MeSHD012106 examined the effect of using ...</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>18371110</td>
+      <td>MeSHD001853 trephine MeSHQ000033 and immunohis...</td>
+      <td>Chronic myelomonocytic leukaemia (CMML) is a c...</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>10648631</td>
+      <td>Mutational MeSHQ000032 of the highly conserved...</td>
+      <td>We have suggested previously that both the neg...</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>10606228</td>
+      <td>Spontaneous and MeSHD009153-induced transforma...</td>
+      <td>Loss of MeSHQ000502 of MeSHD053843 (MMR) MeSHD...</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>10671540</td>
+      <td>The regulatory beta subunit of MeSHD047390 med...</td>
+      <td>MeSHD047390 is a tetrameric MeSHD004798 compos...</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18366613</td>
+      <td>A MeSHD002678 MeSHD000069550-based MeSHD008722...</td>
+      <td>BACKGROUND: The MeSHD011379 for many MeSHD0093...</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>18381570</td>
+      <td>BRAFV600E MeSHD009154 is associated with prefe...</td>
+      <td>CONTEXT: Mutually exclusive MeSHD009154 of RET...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
 
 # Other options
 
 ## Translate specific file
 
-In order to translate one file, just create the `XMLtrans` object with the input file path, execute the required methods, and use the `save_output` method with the output file path as a parameter.
+In order to translate one file, just create the `XMLtrans` object with the input file path, execute the required methods, and use the `save_xml` method with the output file path as a parameter. It is also possible to export to a plain text file by executing the `save_txt` method.
 
 
 ```python
@@ -70,10 +230,11 @@ output_file = "../../data/sample_annotated_xml/10605405_annotated_translated.xml
 
 xml_translation = XMLtrans(input_file)
 xml_translation.translate()
-xml_translation.save_output(output_file)
+xml_translation.save_xml(output_file)
+xml_translation.save_txt(output_file, split = True) # The split argument indicates whether to differentiate title and abstract.
 ```
 
-## Use `xml_trasnlate.py` file directly
+## Use `xml_translatepython.py` file directly
 
 The code file itself is prepared to work on their own given some parameters. In order to execute the script, run the following command:
 
@@ -93,13 +254,17 @@ Optionally, the output file/directory argument can be used to specify where shou
 
 * If a directory is provided, it will create a new directory with the same name but adding `_translated` to it.
 
+If you wish to output to a .TSV file, set the following argument to 1:
+
+* --tsv: default 0
+
 An example of the command that will create the directory  `sample_annotated_xml_translated`:
 
 ```bash
 python xml_translate.py -d sample_annotated_xml
 ```
 
-In `code/tests` folder, a file containing unittest can be found.
+In the folder `code/tests`, a file containing unittest can be found.
 
 # Results
 
@@ -215,5 +380,5 @@ The MeSHQ000706 of biomedicine, complementary and MeSHD000529, and MeSHD008519 f
 ```
 
     [NbConvertApp] Converting notebook tutorial_xml_translate.ipynb to markdown
-    [NbConvertApp] Writing 8070 bytes to README.md
+    [NbConvertApp] Writing 13102 bytes to README.md
 
