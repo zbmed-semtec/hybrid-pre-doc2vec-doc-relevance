@@ -127,7 +127,7 @@ class XMLtrans:
 
         self.mesh_id_pattern = r"\/MESH\/(.*)"
         self.namespace = {
-            "z": "https://github.com/zbmed-semtec/whatizit-dictionary-ner/"}
+            "z": "https://github.com/zbmed-semtec/whatizit-dictionary-ner#"}
 
         self.pmid = self.locate_pmid()
         self.trans_dict = self.create_dict(verify_integrity)

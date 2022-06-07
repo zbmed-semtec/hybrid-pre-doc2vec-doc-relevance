@@ -130,3 +130,6 @@ dmypy.json
 
 # vscode directories
 .vscode/
+
+# large datafiles
+data_full/*
