@@ -8,7 +8,28 @@ import pandas as pd
 
 from typing import Tuple, List
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
+from gensim.models.callbacks import CallbackAny2Vec
 
+class EpochLogger(CallbackAny2Vec):
+
+    '''Callback to log information about training'''
+
+
+    def __init__(self):
+
+        self.epoch = 0
+
+
+    def on_epoch_begin(self, model):
+
+        print("Epoch #{} start".format(self.epoch))
+
+
+    def on_epoch_end(self, model):
+
+        print("Epoch #{} end".format(self.epoch))
+
+        self.epoch += 1
 
 def load_numpy_file(input_path: str) -> Tuple[List[int], List[List[str]]]:
     """
@@ -119,7 +140,7 @@ def generate_doc2vec_model(
     params: dict = {
         "vector_size": 200, 
         "window": 5, 
-        "min_count": 1, 
+        "min_count": 5, 
         "epochs": 5, 
         "workers": 4}
     ) -> Doc2Vec:
@@ -134,7 +155,7 @@ def generate_doc2vec_model(
         list.
     params : dict, optional
         Dictionary containing the parameters to create the Doc2Vec model, by
-        default { "vector_size": 200, "window": 5, "min_count": 1, "epochs": 5,
+        default { "vector_size": 200, "window": 5, "min_count": 5, "epochs": 5,
         "workers": 4}
 
     Returns
@@ -163,10 +184,11 @@ def train_doc2vec_model(model: Doc2Vec, tagged_data: TaggedDocument, time_train:
         TaggedDocument where every PMID is tagged into an element of the token
         list.
     """
+    epoch_logger = EpochLogger()
     if time_train: start_time = time.time()
 
     model.train(tagged_data, total_examples=model.corpus_count,
-                epochs=model.epochs)
+                epochs=model.epochs, callbacks=[epoch_logger])
 
     if time_train: print("--- Time to train: {:.2f} seconds".format(time.time() - start_time))
 
@@ -192,6 +214,7 @@ if __name__ == "__main__":
                         help="Path to output Doc2Vec model")
     args = parser.parse_args()
 
+    # Process output file
     if args.output:
         output_path = args.output
         if not output_path.endswith(".model"):
@@ -202,10 +225,11 @@ if __name__ == "__main__":
     pmid, join_text = load_tokens(args.input)
     tagged_data = generate_TaggedDocument(pmid, join_text)
     
+    # Modify these model parameters.
     params_d2v = {
         "vector_size": 200, 
         "window": 5, 
-        "min_count": 1, 
+        "min_count": 5, 
         "epochs": 5, 
         "workers": 4}
 
@@ -213,32 +237,3 @@ if __name__ == "__main__":
     train_doc2vec_model(model, tagged_data, time_train = True)
     save_doc2vec_model(model, output_path)
     
-
-
-# def create_sim(model):
-#     output_file = "relish_relevance_matrix_full.csv"
-#     matrix_df = pd.read_csv("relish_relevance_matrix.csv")
-#     matrix_df["Cosine Similarity"] = ""
-
-#     for index, row in matrix_df.iterrows():
-#         ref_pmid = row["PMID Reference"]
-#         assessed_pmid = row["PMID Assessed"]
-
-#         try:
-#             row["Cosine Similarity"] = round(
-#                 model.docvecs.similarity(str(ref_pmid), str(assessed_pmid)), 2)
-#         except:
-#             row["Cosine Similarity"] = ""
-
-#         matrix_df.at[index, 'Cosine Similarity'] = row['Cosine Similarity']
-#     matrix_df.to_csv(output_file, index=False)
-
-
-# input_path = "../../../data_full/RELISH_tokens.npy"
-# pmid, join_text = load_tokens(input_path)
-# tagged_data = generate_TaggedDocument(pmid, join_text)
-# model = generate_doc2vec_model(tagged_data)
-# train_doc2vec_model(model, tagged_data)
-
-# create_sim(model)
-# model.save("train_inside.model")
