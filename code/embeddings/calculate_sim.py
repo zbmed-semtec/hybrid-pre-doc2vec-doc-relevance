@@ -161,5 +161,5 @@ if __name__ == "__main__":
     rel_matrix = load_relevance_matrix(args.input)
     model = load_d2v_model(args.model)
     
-    fill_relevance_matrix(rel_matrix, model, verbose = 1)
+    fill_relevance_matrix(rel_matrix, model, dataset, verbose = 1)
     save_rel_matrix(rel_matrix, output_path)
