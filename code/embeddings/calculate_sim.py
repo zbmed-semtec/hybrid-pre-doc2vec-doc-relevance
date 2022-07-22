@@ -4,6 +4,8 @@ import math
 import argparse
 import logging
 import pandas as pd
+import numpy as np
+
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 
 def load_relevance_matrix(input_path: str) -> pd.DataFrame:
@@ -110,6 +112,8 @@ def fill_relevance_matrix(rel_matrix: pd.DataFrame, model: Doc2Vec, dataset: str
 
         if verbose and i%intervals == 0:
             print("Process at {}%".format(math.floor(i/intervals*100/divisions)))
+    
+    rel_matrix["Cosine Similarity"] = round(pd.to_numeric(rel_matrix["Cosine Similarity"]), 2)
 
 def save_rel_matrix(rel_matrix: pd.DataFrame, output_path: str) -> None:
     """

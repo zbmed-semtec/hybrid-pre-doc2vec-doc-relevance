@@ -14,21 +14,15 @@ class EpochLogger(CallbackAny2Vec):
 
     '''Callback to log information about training'''
 
-
     def __init__(self):
-
         self.epoch = 0
 
 
     def on_epoch_begin(self, model):
-
         print("Epoch #{} start".format(self.epoch))
 
-
     def on_epoch_end(self, model):
-
         print("Epoch #{} end".format(self.epoch))
-
         self.epoch += 1
 
 def load_numpy_file(input_path: str) -> Tuple[List[int], List[List[str]]]:
@@ -185,10 +179,12 @@ def train_doc2vec_model(model: Doc2Vec, tagged_data: TaggedDocument, time_train:
         list.
     """
     epoch_logger = EpochLogger()
-    if time_train: start_time = time.time()
+    if time_train: 
+        start_time = time.time()
+    callbacks = [epoch_logger] if time_train else []
 
     model.train(tagged_data, total_examples=model.corpus_count,
-                epochs=model.epochs, callbacks=[epoch_logger])
+                epochs=model.epochs, callbacks=callbacks)
 
     if time_train: print("--- Time to train: {:.2f} seconds".format(time.time() - start_time))
 
