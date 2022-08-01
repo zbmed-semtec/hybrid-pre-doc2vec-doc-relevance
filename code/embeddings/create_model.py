@@ -1,5 +1,7 @@
 import sys
 import time
+import os
+import shutil
 
 import logging
 import argparse
@@ -10,19 +12,22 @@ from typing import Tuple, List
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from gensim.models.callbacks import CallbackAny2Vec
 
-class EpochLogger(CallbackAny2Vec):
+logger = logging.getLogger(__name__)
 
+class EpochLogger(CallbackAny2Vec):
     '''Callback to log information about training'''
 
     def __init__(self):
         self.epoch = 0
 
-
     def on_epoch_begin(self, model):
-        print("Epoch #{} start".format(self.epoch))
+        #print("B")
+        #logger = logger.getLogger("embeddings")
+        logger.debug("\tEpoch #{} start".format(self.epoch))
 
     def on_epoch_end(self, model):
-        print("Epoch #{} end".format(self.epoch))
+        #logger = logging.getLogger("embeddings")
+        logger.debug("\tEpoch #{} end".format(self.epoch))
         self.epoch += 1
 
 def load_numpy_file(input_path: str) -> Tuple[List[int], List[List[str]]]:
@@ -165,28 +170,42 @@ def generate_doc2vec_model(
     return model
 
 
-def train_doc2vec_model(model: Doc2Vec, tagged_data: TaggedDocument, time_train: bool = False) -> None:
+def train_doc2vec_model(model: Doc2Vec, tagged_data: TaggedDocument, verbose: int = 0) -> None:
     """
     Trains the model using the taggedDocuments. Since the model had the
     vocabulary built already, we only need to call for the train() function.
 
     Parameters
     ----------
-    model : Doc2Vec
+    model: Doc2Vec
         Doc2Vec model.
-    tagged_data : TaggedDocument
+    tagged_data: TaggedDocument
         TaggedDocument where every PMID is tagged into an element of the token
         list.
+    verbose: int
+        Determines the logging level of the training. 
+        * 0: to not receive any information.
+        * 1: to receive the total training time.
+        * 2: to receive the total training time and where the epochs 
+            start/finish.
     """
     epoch_logger = EpochLogger()
-    if time_train: 
-        start_time = time.time()
-    callbacks = [epoch_logger] if time_train else []
-
+    callbacks = [epoch_logger]
+    start_time = time.time()
+    
+    if verbose == 0:
+        logger.setLevel(logging.WARNING)
+    elif verbose == 1:
+        logger.setLevel(logging.INFO)
+    elif verbose == 2:
+        logger.setLevel(logging.DEBUG)
+    
     model.train(tagged_data, total_examples=model.corpus_count,
                 epochs=model.epochs, callbacks=callbacks)
 
-    if time_train: print("--- Time to train: {:.2f} seconds".format(time.time() - start_time))
+    logger.info("--- Time to train: {:.2f} seconds".format(time.time() - start_time))
+    logger.setLevel(logging.WARNING)
+
 
 def save_doc2vec_model(model: Doc2Vec, output_path: str) -> None:
     """
@@ -200,6 +219,37 @@ def save_doc2vec_model(model: Doc2Vec, output_path: str) -> None:
         Path for output model.
     """
     model.save(output_path)
+
+def save_doc2vec_embeddings(model: Doc2Vec, pmids: List[int], output_path: str, one_file: bool = True):
+    """
+    Stores all the embeddings into a single file .npy file. The structure saved
+    is a dictionary where the keys are the PMIDs and the values are the
+    embeddings themselves.
+
+    Parameters
+    ----------
+    model: Doc2Vec
+        Doc2Vec model.
+    pmids: List[int]
+        List of PMIDs extracted from the data.
+    output_path: str
+        Path for output file.
+    one_file: boolean, optional
+        Determines whether to store each embeddings individually or in a
+        singles file.
+    """
+    if one_file:
+        data_embeddings = model.dv.vectors
+        dict_embeddings = np.asanyarray({str(pmid):data_embeddings[i] for i, pmid in enumerate(pmids)})
+        np.save(output_path, dict_embeddings, allow_pickle=True)
+    else:
+        if os.path.isdir(output_path):
+            shutil.rmtree(output_path)
+            #logging.error("Directory already exists.")
+            #sys.exit("Input directory already exists.")
+        os.mkdir(output_path)
+        for pmid in pmids:
+            np.save(f"{output_path}/{pmid}.npy", model.dv[str(pmid)], allow_pickle=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -232,4 +282,3 @@ if __name__ == "__main__":
     model = generate_doc2vec_model(tagged_data, params_d2v)
     train_doc2vec_model(model, tagged_data, time_train = True)
     save_doc2vec_model(model, output_path)
-    

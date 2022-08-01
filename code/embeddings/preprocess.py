@@ -149,5 +149,5 @@ if __name__ == "__main__":
     
     data = read_data(args.input)
     data = preprocess_data(data)
-    save_output(data, output_path, npy_format=False)
-    save_output(data, output_path, npy_format=True)
+    save_output(data.iloc, output_path, npy_format=False)
+    save_output(data.iloc, output_path, npy_format=True)
