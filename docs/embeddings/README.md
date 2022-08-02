@@ -14,8 +14,8 @@ First, we need to import the libraries from the code folder. To do so, change th
 
 
 ```python
-%load_ext autoreload
-%autoreload 2
+#%load_ext autoreload
+#%autoreload 2
 
 import os
 import sys
@@ -40,6 +40,11 @@ Next, we need to import the preprocessed tokens. An small sample is provided in 
 
 ```python
 tokens_path = "data/embeddings/RELISH/RELISH_tokens.tsv"
+#tokens_path = "data/embeddings/TREC/TREC_tokens.tsv"
+
+#tokens_path = "../data_full/RELISH/RELISH_tokens.tsv"
+#tokens_path = "../data_full/TREC/TREC_tokens.tsv"
+
 pmid, join_text = cm.load_tokens(tokens_path)
 ```
 
@@ -58,11 +63,11 @@ First, we need to choose the hyperparameters of the model. In this tutorial, we 
 ```python
 params_d2v = {
     "dm": 0,
-    "vector_size": 200, 
-    "window": 5, 
+    "vector_size": 256, 
+    "window": 7, 
     "min_count": 5, 
     "epochs": 10, 
-    "workers": 4}
+    "workers": 8}
 ```
 
 To create the model, use the `generate_doc2vec_model()` function with the tagged data and the model parameters. This function automatically creates the required vocabulary for training:
@@ -78,26 +83,121 @@ The function `train_doc2vec_model` is responsible for training the previously ge
 
 
 ```python
-cm.train_doc2vec_model(model, tagged_data, verbose=1)
+cm.train_doc2vec_model(model, tagged_data, verbose=2)
 ```
 
-    2022-08-01 10:24:07,013 --- Time to train: 0.26 seconds
+    2022-08-02 15:52:16,233 	Epoch #0 start
+    2022-08-02 15:52:16,268 	Epoch #0 end
+    2022-08-02 15:52:16,269 	Epoch #1 start
+    2022-08-02 15:52:16,292 	Epoch #1 end
+    2022-08-02 15:52:16,292 	Epoch #2 start
+    2022-08-02 15:52:16,322 	Epoch #2 end
+    2022-08-02 15:52:16,322 	Epoch #3 start
+    2022-08-02 15:52:16,347 	Epoch #3 end
+    2022-08-02 15:52:16,348 	Epoch #4 start
+    2022-08-02 15:52:16,373 	Epoch #4 end
+    2022-08-02 15:52:16,373 	Epoch #5 start
+    2022-08-02 15:52:16,397 	Epoch #5 end
+    2022-08-02 15:52:16,398 	Epoch #6 start
+    2022-08-02 15:52:16,423 	Epoch #6 end
+    2022-08-02 15:52:16,424 	Epoch #7 start
+    2022-08-02 15:52:16,453 	Epoch #7 end
+    2022-08-02 15:52:16,454 	Epoch #8 start
+    2022-08-02 15:52:16,482 	Epoch #8 end
+    2022-08-02 15:52:16,482 	Epoch #9 start
+    2022-08-02 15:52:16,518 	Epoch #9 end
+    2022-08-02 15:52:16,519 --- Time to train: 0.29 seconds
 
 
 The model can be stored to later be used by `save_doc2vec_model()` function:
 
 
 ```python
-ouput_model_path = "data/embeddings/RELISH/RELISH_hybrid_d2v.model"
-cm.save_doc2vec_model(model, ouput_model_path)
+output_model_path = "data/embeddings/RELISH/RELISH_hybrid_d2v.model"
+#output_model_path = "data/embeddings/TREC/TREC_hybrid_d2v.model"
+
+#output_model_path = "../data_full/RELISH/RELISH_hybrid_d2v.model"
+#output_model_path = "../data_full/TREC/TREC_hybrid_d2v.model"
+
+cm.save_doc2vec_model(model, output_model_path)
+```
+
+## Step 5: Store the embeddings
+
+The embeddings can be stored either in the model itself (recommended) or as a separate entity outside of Doc2Vec (this allows to calculate cosine similarity without the need of Doc2Vec once the embeddings are already generated).
+
+At the same time, the user can choose to store the embeddings into a single file or into multiple files using the same `save_doc2vec_embedding()` function:
+
+
+
+```python
+cm.save_doc2vec_embeddings(model, pmid[:15], "data/embeddings/RELISH/DocumentVectors", one_file = False)
+#cm.save_doc2vec_embeddings(model, pmid, "data/embeddings/RELISH/RELISH_document_embeddings.npy", one_file = True)
+
+#cm.save_doc2vec_embeddings(model, pmid[:15], "data/embeddings/TREC/DocumentVectors", one_file = False)
+#cm.save_doc2vec_embeddings(model, pmid, "data/embeddings/TREC/TREC_document_embeddings.npy", one_file = True)
 ```
 
 # Decision notes
 
 ## Code strategy
 
+1. The pipeline accepts either a `.tsv` or a `.npy` format as the input tokens. Usually, `.tsv` format is prefered since its size on disk is smaller. The tokens should have been generated following the [preprocessing tutorial](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/blob/main/docs/preprocessing/tutorial_preprocessing.ipynb).
+    
+    If using a custom `.tsv` file, three columns are required: "PMID", "title" and "abstract".
+    
+
+2. The input of Doc2Vec models should be a list of `TaggedDocument`. In this case, we join the title and the abstract as a single paragraph and set the PMID as the tag. 
+
+3. To decide on the hyperparameters, we performed a literature review of common Doc2Vec hyperparameters and their different possibilities. Results can be consulted [here](https://github.com/zbmed-semtec/medline-preprocessing/tree/main/resources). We opted to use a dictonary of the hyperparameters since this allows for an easy hyperparameter search implementation. Please, refer to the [tendency analysis](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/blob/main/docs/tendency_analysis/tutorial_tendency_analysis.ipynb) study in which the different hyperparamters are tested.
+
+4. To create the model, we just need the input hyperparameters and the tagged data to build a vocabulary. The vocabulary building step is executed in here in order to better separate the model creating from its training, but it could be constructed at the training time without any problem.
+
+5. To train the model, we use the number of epochs selected in the model parameters and the examples provided in the tagged data. Additionally, we provide a logging implementation to obtain information about the training:
+
+    * Warning/Errors (verbose = 0): default information logged by `gensim` if any error occurs during the training.
+
+    * Info (verbose = 1): provides information about the total training time (in seconds).
+
+    * Debug (verbose = 2): shows the time at which every epoch starts and finishes.
+
+    Lastly, once the model is trained, it can be stored in disk to load later.
+
+6. The last step is to generate the embeddings for each publication. This allows to later calculate the cosine similarities for each pair of documents without the need of the `Doc2Vec` model. 
+
 ## Decisions
+
+* The parameters are passed to the `generate_doc2vec_model()` function as a dictionary to later facilitate the inclusion of hyperparemeter optimization as well as providing an easy to use and implement feaure.
+
+* In the training process, we employed the `logging` library to provide information about to the end user. The information reported is selected with the `verbose` parameter as explained in the section before.
+
+* **MISSING EMBEDDINGS OUTPUT DECISIONS**
+
+* **MISSING VOCABULARY CREATION DECISIONS (if needed)**
+
+<! ---
+The vocabulary is built when the model is created followed the tutorials in their documentation. The vocabulary construction can be executed automatically either at model initiailization and model training, but to provide a clearer pipeline, it is left manua
+-->
+
+## Notes
+
+The time to train each dataset (TREC or RELISH) using 8 cores of an Intel(R) Xeon(R) Gold 6230R CPU @ 2.10GHz with 16GB of RAM running Ubuntu 20.04 LTS and Python 3.8.10 is:
+
+* RELISH (163189 publications): 25 seconds per epoch on average.
+
+* TREC (32604 publications): 5 seconds per epoch on average.
+
+These results will greatly depend on the chosen hyperparameters. The results are for the ones provided in this tutorial.
 
 # TODO
 
 * Include library dependencies in prerequisites.
+
+* Finish the decisions.
+
+**REMOVE THIS LINE BEFORE FINAL VERSION COMMIT**
+
+
+```python
+!jupyter nbconvert docs/embeddings/tutorial_embeddings.ipynb --to markdown --output README.md
+```
