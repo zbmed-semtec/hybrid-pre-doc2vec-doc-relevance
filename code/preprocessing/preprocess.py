@@ -7,6 +7,7 @@ import re
 import numpy as np
 import pandas as pd
 from string import punctuation
+from typing import List
 
 
 def read_data(input_path: str) -> pd.DataFrame:
@@ -26,7 +27,7 @@ def read_data(input_path: str) -> pd.DataFrame:
     return pd.read_csv(input_path, delimiter="\t", quotechar="`")
 
 
-def preprocess_text(text: str, process_abv: bool = False) -> str:
+def preprocess_text(text: str, alphanumeric_pattern: str = r"[a-zA-Z\d]", allowed_punctuation: List[str] = ["-"], process_abv: bool = False) -> str:
     """
     Preprocess a given string. The steps are: 
         1. Convert abbreviations such as "E. Coli" to a single word.
@@ -40,6 +41,12 @@ def preprocess_text(text: str, process_abv: bool = False) -> str:
     process_abv : bool, optional
         Whether modify abbreviations such as "E. coli", where it is transformed
         as ecoli, by default False.
+    alphanumeric_pattern: str, optional
+        String containing the REGEX pattern to identify alphanumeric
+        characters.
+    allowed_punctuation: str, optional
+        List of allowed punctuation characters, by default only "-" will be
+        kept.
 
     Returns
     -------
@@ -47,6 +54,7 @@ def preprocess_text(text: str, process_abv: bool = False) -> str:
         The preprocecessed text file
     """
     if process_abv:
+        abv_pattern = r"((?:^|\s)[a-zA-Z]\.)(\s?)([a-z]\w+)"
         text = re.sub(abv_pattern, r"\1\3", text)
 
     text_list = []
@@ -63,7 +71,7 @@ def preprocess_text(text: str, process_abv: bool = False) -> str:
     return text
 
 
-def preprocess_data(data: pd.DataFrame, process_abv: bool = False) -> pd.DataFrame:
+def preprocess_data(data: pd.DataFrame, alphanumeric_pattern: str = r"[a-zA-Z\d]", allowed_punctuation: List[str] = ["-"], process_abv: bool = False) -> pd.DataFrame:
     """
     Main pipeline to read the input DataFrame and preprocess both the title and
     abstract columns.
@@ -75,6 +83,12 @@ def preprocess_data(data: pd.DataFrame, process_abv: bool = False) -> pd.DataFra
     process_abv : bool, optional
         Whether modify abbreviations such as "E. coli", where it is transformed
         as ecoli, by default False.
+    alphanumeric_pattern: str, optional
+        String containing the REGEX pattern to identify alphanumeric
+        characters.
+    allowed_punctuation: str, optional
+        List of allowed punctuation characters, by default only "-" will be
+        kept.
 
     Returns
     -------
@@ -86,9 +100,8 @@ def preprocess_data(data: pd.DataFrame, process_abv: bool = False) -> pd.DataFra
         abstract = row["abstract"]
         #title = "MeSHD003643 signal-induced localization of p53 MeSHD011506 to MeSHD008928. A potential MeSHD012380 in apoptotic signaling. The element's H(2)O that we've described. The study of E. coli bacteria in E.coli sickness."
 
-        title = preprocess_text(title, process_abv)
-        abstract = preprocess_text(abstract, process_abv)
-        # print(title)
+        title = preprocess_text(title, alphanumeric_pattern, allowed_punctuation, process_abv)
+        abstract = preprocess_text(abstract, alphanumeric_pattern, allowed_punctuation, process_abv)
 
         data.at[i, "title"] = title
         data.at[i, "abstract"] = abstract
@@ -118,6 +131,8 @@ def save_output(data: pd.DataFrame, output_path: str, npy_format: bool = False) 
 
         np.save(output_path, np.asanyarray(output_data, dtype = object))
     else:
+        if not output_path.endswith(".tsv"):
+            output_path = output_path + ".tsv"
         data.to_csv(output_path, sep="\t", index=False, quotechar="`")
 
 
@@ -148,6 +163,6 @@ if __name__ == "__main__":
     allowed_punctuation = ["-"]
     
     data = read_data(args.input)
-    data = preprocess_data(data)
-    save_output(data.iloc, output_path, npy_format=False)
-    save_output(data.iloc, output_path, npy_format=True)
+    data = preprocess_data(data, alphanumeric_pattern, allowed_punctuation)
+    save_output(data, output_path, npy_format=False)
+    save_output(data, output_path, npy_format=True)
