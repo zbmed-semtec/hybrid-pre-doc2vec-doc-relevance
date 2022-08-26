@@ -182,7 +182,7 @@ def train_doc2vec_model(model: Doc2Vec, tagged_data: TaggedDocument, verbose: in
     tagged_data: TaggedDocument
         TaggedDocument where every PMID is tagged into an element of the token
         list.
-    verbose: int
+    verbose: int, optional
         Determines the logging level of the training. 
         * 0: to not receive any information.
         * 1: to receive the total training time.
@@ -236,12 +236,13 @@ def save_doc2vec_embeddings(model: Doc2Vec, pmids: List[int], output_path: str, 
         Path for output file.
     one_file: boolean, optional
         Determines whether to store each embeddings individually or in a
-        singles file.
+        singles file. By default, True.
     """
     if one_file:
-        data_embeddings = model.dv.vectors
-        dict_embeddings = np.asanyarray({str(pmid):data_embeddings[i] for i, pmid in enumerate(pmids)})
-        np.save(output_path, dict_embeddings, allow_pickle=True)
+        embeddings_df = pd.DataFrame({"pmids": pmids, "embeddings" : model.dv.vectors.tolist()})
+        embeddings_df["pmids"] = embeddings_df["pmids"].apply(str)
+        embeddings_df.sort_values(by = "pmids", ignore_index = True, inplace = True)
+        embeddings_df.to_pickle(output_path)
     else:
         if os.path.isdir(output_path):
             shutil.rmtree(output_path)

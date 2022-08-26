@@ -86,27 +86,27 @@ The function `train_doc2vec_model` is responsible for training the previously ge
 cm.train_doc2vec_model(model, tagged_data, verbose=2)
 ```
 
-    2022-08-02 15:52:16,233 	Epoch #0 start
-    2022-08-02 15:52:16,268 	Epoch #0 end
-    2022-08-02 15:52:16,269 	Epoch #1 start
-    2022-08-02 15:52:16,292 	Epoch #1 end
-    2022-08-02 15:52:16,292 	Epoch #2 start
-    2022-08-02 15:52:16,322 	Epoch #2 end
-    2022-08-02 15:52:16,322 	Epoch #3 start
-    2022-08-02 15:52:16,347 	Epoch #3 end
-    2022-08-02 15:52:16,348 	Epoch #4 start
-    2022-08-02 15:52:16,373 	Epoch #4 end
-    2022-08-02 15:52:16,373 	Epoch #5 start
-    2022-08-02 15:52:16,397 	Epoch #5 end
-    2022-08-02 15:52:16,398 	Epoch #6 start
-    2022-08-02 15:52:16,423 	Epoch #6 end
-    2022-08-02 15:52:16,424 	Epoch #7 start
-    2022-08-02 15:52:16,453 	Epoch #7 end
-    2022-08-02 15:52:16,454 	Epoch #8 start
-    2022-08-02 15:52:16,482 	Epoch #8 end
-    2022-08-02 15:52:16,482 	Epoch #9 start
-    2022-08-02 15:52:16,518 	Epoch #9 end
-    2022-08-02 15:52:16,519 --- Time to train: 0.29 seconds
+    2022-08-26 10:54:16,190 	Epoch #0 start
+    2022-08-26 10:54:16,220 	Epoch #0 end
+    2022-08-26 10:54:16,221 	Epoch #1 start
+    2022-08-26 10:54:16,248 	Epoch #1 end
+    2022-08-26 10:54:16,248 	Epoch #2 start
+    2022-08-26 10:54:16,274 	Epoch #2 end
+    2022-08-26 10:54:16,275 	Epoch #3 start
+    2022-08-26 10:54:16,305 	Epoch #3 end
+    2022-08-26 10:54:16,305 	Epoch #4 start
+    2022-08-26 10:54:16,340 	Epoch #4 end
+    2022-08-26 10:54:16,340 	Epoch #5 start
+    2022-08-26 10:54:16,370 	Epoch #5 end
+    2022-08-26 10:54:16,370 	Epoch #6 start
+    2022-08-26 10:54:16,408 	Epoch #6 end
+    2022-08-26 10:54:16,409 	Epoch #7 start
+    2022-08-26 10:54:16,447 	Epoch #7 end
+    2022-08-26 10:54:16,448 	Epoch #8 start
+    2022-08-26 10:54:16,477 	Epoch #8 end
+    2022-08-26 10:54:16,478 	Epoch #9 start
+    2022-08-26 10:54:16,508 	Epoch #9 end
+    2022-08-26 10:54:16,508 --- Time to train: 0.32 seconds
 
 
 The model can be stored to later be used by `save_doc2vec_model()` function:
@@ -124,18 +124,19 @@ cm.save_doc2vec_model(model, output_model_path)
 
 ## Step 5: Store the embeddings
 
-The embeddings can be stored either in the model itself (recommended) or as a separate entity outside of Doc2Vec (this allows to calculate cosine similarity without the need of Doc2Vec once the embeddings are already generated).
+The embeddings can be stored either in the model itself or as a separate entity outside of Doc2Vec (this allows to calculate cosine similarity without the need of Doc2Vec once the embeddings are already generated).
 
-At the same time, the user can choose to store the embeddings into a single file or into multiple files using the same `save_doc2vec_embedding()` function:
-
+At the same time, the user can choose to store the embeddings into a single file (recommended) or into multiple files using the same `save_doc2vec_embedding()` function:
 
 
 ```python
-cm.save_doc2vec_embeddings(model, pmid[:15], "data/embeddings/RELISH/DocumentVectors", one_file = False)
-#cm.save_doc2vec_embeddings(model, pmid, "data/embeddings/RELISH/RELISH_document_embeddings.npy", one_file = True)
+output_path = "data/embeddings/RELISH/RELISH_document_embeddings.pkl"
+#output_path = "data/embeddings/TREC/TREC_document_embeddings.pkl"
 
-#cm.save_doc2vec_embeddings(model, pmid[:15], "data/embeddings/TREC/DocumentVectors", one_file = False)
-#cm.save_doc2vec_embeddings(model, pmid, "data/embeddings/TREC/TREC_document_embeddings.npy", one_file = True)
+#output_path = "../data_full/RELISH/RELISH_document_embeddings.pkl"
+#output_path = "../data_full/TREC/TREC_document_embeddings.pkl"
+
+cm.save_doc2vec_embeddings(model, pmid, output_path, one_file=True)
 ```
 
 # Decision notes
@@ -187,7 +188,7 @@ The time to train each dataset (TREC or RELISH) using 8 cores of an Intel(R) Xeo
 
 * TREC (32604 publications): 5 seconds per epoch on average.
 
-These results will greatly depend on the chosen hyperparameters. The results are for the ones provided in this tutorial.
+These results will greatly depend on the chosen hyperparameters.
 
 # TODO
 
@@ -195,9 +196,15 @@ These results will greatly depend on the chosen hyperparameters. The results are
 
 * Finish the decisions.
 
+* Finish how to fill the relevance matrix maybe.
+
 **REMOVE THIS LINE BEFORE FINAL VERSION COMMIT**
 
 
 ```python
 !jupyter nbconvert docs/embeddings/tutorial_embeddings.ipynb --to markdown --output README.md
 ```
+
+    [NbConvertApp] Converting notebook docs/embeddings/tutorial_embeddings.ipynb to markdown
+    [NbConvertApp] Writing 9129 bytes to docs/embeddings/README.md
+
