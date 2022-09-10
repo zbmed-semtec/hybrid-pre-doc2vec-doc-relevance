@@ -1,3 +1,19 @@
+"""
+This file constains the necessary functions to run the text preprocessing
+required for the hybrid approach.
+
+Example
+-------
+To execute the script, you can run the following command:
+
+    $ python code/preprocessing/preprocess.py --input data/RELISH/RELISH_documents_20220628_ann_swr.tsv --output data/RELISH/RELISH_tokens.tsv
+
+    
+Notes
+-----
+A more detailed tutorial can be found in
+[`docs/xml_translate`](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/tree/main/docs/preprocessing)
+"""
 import sys
 
 import argparse
@@ -9,6 +25,8 @@ import pandas as pd
 from string import punctuation
 from typing import List
 
+__version__ = "0.1.1"
+__author__ = "Guillermo Rocamora Pérez"
 
 def read_data(input_path: str) -> pd.DataFrame:
     """
@@ -165,4 +183,4 @@ if __name__ == "__main__":
     data = read_data(args.input)
     data = preprocess_data(data, alphanumeric_pattern, allowed_punctuation)
     save_output(data, output_path, npy_format=False)
-    save_output(data, output_path, npy_format=True)
+    #save_output(data, output_path, npy_format=True)
