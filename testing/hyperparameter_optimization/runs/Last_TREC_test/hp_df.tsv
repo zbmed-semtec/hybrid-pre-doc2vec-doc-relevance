@@ -1,3 +1,0 @@
-	dm	epochs	min_count	vector_size	window	workers	AUC
-0	1	5	5	256	5	8	0.6013507508891971
-1	1	5	5	256	6	8	0.5981687872690011
