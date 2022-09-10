@@ -1,3 +1,20 @@
+"""
+This file contains the required functions to generate and train a Doc2vec model
+from preproccessed tokens.
+
+It can output both the Doc2vec model or the embeddings for the training PMIDs.
+
+Example
+-------
+To execute the script, you can run the following command:
+
+    $ python code/embeddings/create_model.py --input data/RELISH/RELISH_tokens.tsv --embeddings data/RELISH/RELISH_embeddings.pkl --output data/RELISH/RELISH_hybrid.model
+
+Notes
+-----
+A more detailed tutorial can be found in
+[`docs/xml_translate`](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/tree/main/docs/embeddings)
+"""
 import sys
 import time
 import os
@@ -13,6 +30,9 @@ from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from gensim.models.callbacks import CallbackAny2Vec
 
 logger = logging.getLogger(__name__)
+
+__version__ = "0.2.4"
+__author__ = "Guillermo Rocamora Pérez"
 
 class EpochLogger(CallbackAny2Vec):
     '''Callback to log information about training'''
@@ -189,6 +209,9 @@ def train_doc2vec_model(model: Doc2Vec, tagged_data: TaggedDocument, verbose: in
         * 2: to receive the total training time and where the epochs 
             start/finish.
     """
+    if not verbose in [0, 1, 2]:
+            logger.warning("Not a valid verbose value. Defaults to 0.")
+            verbose = 0
     epoch_logger = EpochLogger()
     callbacks = [epoch_logger]
     start_time = time.time()
@@ -240,8 +263,8 @@ def save_doc2vec_embeddings(model: Doc2Vec, pmids: List[int], output_path: str, 
     """
     if one_file:
         embeddings_df = pd.DataFrame({"pmids": pmids, "embeddings" : model.dv.vectors.tolist()})
-        embeddings_df["pmids"] = embeddings_df["pmids"].apply(str)
         embeddings_df.sort_values(by = "pmids", ignore_index = True, inplace = True)
+        embeddings_df["pmids"] = embeddings_df["pmids"].apply(str)
         embeddings_df.to_pickle(output_path)
     else:
         if os.path.isdir(output_path):
@@ -252,13 +275,22 @@ def save_doc2vec_embeddings(model: Doc2Vec, pmids: List[int], output_path: str, 
         for pmid in pmids:
             np.save(f"{output_path}/{pmid}.npy", model.dv[str(pmid)], allow_pickle=True)
 
+def hybrid_d2v_pipeline(input_path: str, params: List[int], verbose: int = 0) -> Doc2Vec:
+    pmids, join_text = load_tokens(input_path)
+    tagged_data = generate_TaggedDocument(pmids, join_text)
+    model = generate_doc2vec_model(tagged_data, params)
+    train_doc2vec_model(model, tagged_data, verbose = verbose)
+
+    return model
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     #group = parser.add_mutually_exclusive_group(required=True)
     parser.add_argument("-i", "--input", type=str,
-                        help="Path to input .NPY or .TSV file", required=True)
+                        help="Path to input .NPY or .TSV file.", required=True)
     parser.add_argument("-o", "--output", type=str,
-                        help="Path to output Doc2Vec model")
+                        help="Path to output Doc2Vec model.")
+    parser.add_argument("--embeddings", type=str, help="Path to the output embeddings in pickle format.")
     args = parser.parse_args()
 
     # Process output file
@@ -281,5 +313,9 @@ if __name__ == "__main__":
         "workers": 4}
 
     model = generate_doc2vec_model(tagged_data, params_d2v)
-    train_doc2vec_model(model, tagged_data, time_train = True)
-    save_doc2vec_model(model, output_path)
+    train_doc2vec_model(model, tagged_data, verbose = 1)
+    if(args.output):
+        save_doc2vec_model(model, output_path)
+
+    if(args.embeddings):
+        save_doc2vec_embeddings(model, pmid, args.embeddings, one_file = True)
