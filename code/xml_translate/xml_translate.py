@@ -15,7 +15,7 @@ Notes
 A more detailed tutorial can be found in
 [`docs/xml_translate`](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/blob/main/docs/xml_translate/tutorial_xml_translate.ipynb)
 """
-__version__ = "0.3.1"
+__version__ = "0.3.2"
 __author__ = "Guillermo Rocamora Pérez"
 
 import os
@@ -31,7 +31,8 @@ from xml.etree import ElementTree as ET
 from typing import Union, List
 
 
-# logging.getLogger().setLevel(logging.INFO)
+logging.basicConfig(format='%(asctime)s %(message)s')
+logger = logging.getLogger(__name__)
 
 
 def argument_parser(args: argparse.ArgumentParser) -> Union[List[str], List[str]]:
@@ -53,7 +54,7 @@ def argument_parser(args: argparse.ArgumentParser) -> Union[List[str], List[str]
     """
     if args.indir:
         if args.indir.endswith(".xml"):
-            logging.error(
+            logger.error(
                 f"Your input is not a directory, please use --input instead.", exc_info=False)
             sys.exit("No valid input directory.")
 
@@ -64,14 +65,14 @@ def argument_parser(args: argparse.ArgumentParser) -> Union[List[str], List[str]
         files_out = list(map(lambda x: x.replace(indir, outdir), files_in))
 
         if not files_in:
-            logging.error(
+            logger.error(
                 f"No XML files located in the input directory.", exc_info=False)
             sys.exit("No valid input directory.")
 
-        logging.info(f"Files from {indir} will be trasnlated into {outdir}")
+        logger.info(f"Files from {indir} will be trasnlated into {outdir}")
 
         if not os.path.exists(outdir) and not args.tsv:
-            logging.info(f"Output directory created at {outdir}")
+            logger.info(f"Output directory created at {outdir}")
             os.mkdir(outdir)
     elif args.input:
         files_in = [args.input]
@@ -121,7 +122,7 @@ class XMLtrans:
             self.tree = ET.parse(input_file)
             self.root = self.tree.getroot()
         except Exception:
-            logging.error(
+            logger.error(
                 f"Input file ({input_file}) is not a valid XML file.", exc_info=True)
             sys.exit("Input file must have a valid XML format.")
 
@@ -142,7 +143,7 @@ class XMLtrans:
             PMID of the publication.
         """
         if self.root.find("document/id") is None:
-            logging.warning("No PMID was found in the document. Defaults to 0")
+            logger.warning("No PMID was found in the document. Defaults to 0")
             return 0
 
         return self.root.find("document/id").text.strip()
@@ -192,7 +193,7 @@ class XMLtrans:
                 trans_dict[tagged.text] = mesh_id
             else:
                 if verify_integrity and trans_dict[tagged.text] != mesh_id:
-                    logging.error("There is no integrity in the MeSH IDs." +
+                    logger.error("There is no integrity in the MeSH IDs." +
                                   "Two same concepts have different MeSH IDs." +
                                   f" The problem is in: {trans_dict[tagged.text]}.")
         return trans_dict
@@ -283,7 +284,7 @@ class XMLtrans:
 
         with open(file_out, "w+") as file:
             file.write(out_text)
-        logging.info(f"Successfully created file at {file_out}.")
+        logger.info(f"Successfully created file at {file_out}.")
 
 
 def translate_pipeline(files_in: List[str], output_file: str) -> pd.DataFrame:
@@ -335,12 +336,12 @@ if __name__ == "__main__":
                        help="Path to input folder with XML files")
     parser.add_argument("-o", "--output", type=str,
                         help="Path to output text file/dir")
-    parser.add_argument("--tsv", type=int, default=0,
+    parser.add_argument("--tsv", type=int, default=1,
                         help="Whether to output to a .TSV file, write 1 to do so")
     args = parser.parse_args()
 
     if not args.tsv and args.output and args.output.endswith(".tsv"):
-        logging.warning(
+        logger.warning(
             "Your output files ends with .TSV, but --tsv argument is set to 0." +
             "If you wish to output to a .TSV file, please change it to 1.")
 
@@ -350,7 +351,7 @@ if __name__ == "__main__":
         translate_pipeline(files_in, args.output)
     else:
         for i, file in enumerate(files_in):
-            logging.info(f"File {file} open.")
+            logger.info(f"File {file} open.")
             xml_translation = XMLtrans(file)
             xml_translation.translate()
             xml_translation.save_xml(files_out[i])
