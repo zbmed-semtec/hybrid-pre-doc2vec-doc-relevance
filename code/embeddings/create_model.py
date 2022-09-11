@@ -1,6 +1,6 @@
 """
 This file contains the required functions to generate and train a Doc2vec model
-from preproccessed tokens.
+from preprocessed tokens.
 
 It can output both the Doc2vec model or the embeddings for the training PMIDs.
 
@@ -8,6 +8,8 @@ Example
 -------
 To execute the script, you can run the following command:
 
+    $ python code/embeddings/create_model.py --input data/TREC/TREC_tokens.tsv --embeddings data/TREC/TREC_embeddings.pkl --output data/TREC/TREC_hybrid.model
+    
     $ python code/embeddings/create_model.py --input data/RELISH/RELISH_tokens.tsv --embeddings data/RELISH/RELISH_embeddings.pkl --output data/RELISH/RELISH_hybrid.model
 
 Notes
@@ -52,13 +54,13 @@ class EpochLogger(CallbackAny2Vec):
 
 def load_numpy_file(input_path: str) -> Tuple[List[int], List[List[str]]]:
     """
-    Loads a .NPY file with the preprocessed articles. The files should be
+    Loads a NPY file with the preprocessed articles. The files should be
     generated using the preprocess script.
 
     Parameters
     ----------
     input_path : str
-        Input path for the .NPY file.
+        Input path for the NPY file.
 
     Returns
     -------
@@ -70,8 +72,6 @@ def load_numpy_file(input_path: str) -> Tuple[List[int], List[List[str]]]:
     data = np.load(input_path, allow_pickle=True)
 
     pmid = [doc[0].item() for doc in data]
-    #titles = [i[1].tolist() for i in a]
-    #abstract = [i[2].tolist() for i in a]
     join_text = [doc[1].tolist() + doc[2].tolist() for doc in data]
 
     return pmid, join_text
@@ -79,14 +79,14 @@ def load_numpy_file(input_path: str) -> Tuple[List[int], List[List[str]]]:
 
 def load_tsv_file(input_path: str) -> Tuple[List[int], List[List[str]]]:
     """
-    Loads a .TSV file with the preprocessed articles. The files should be
-    generated using the preprocess script, or any .TSV with three columns:
+    Loads a TSV file with the preprocessed articles. The files should be
+    generated using the preprocess script, or any TSV with three columns:
     PMID, title and abstract.
 
     Parameters
     ----------
     input_path : str
-        Input path for the .TSV file.
+        Input path for the TSV file.
 
     Returns
     -------
@@ -95,11 +95,9 @@ def load_tsv_file(input_path: str) -> Tuple[List[int], List[List[str]]]:
     join_text: List[str]
         The combination of title + abstract of the articles in a list.
     """
-    data = pd.read_csv(input_path, delimiter="\t", quotechar="`")
+    data = pd.read_csv(input_path, sep="\t", quotechar="`")
 
     pmid = list(data["PMID"])
-    #title = [title.split() for title in data["title"]]
-    #abstract = [abstract.split() for abstract in data["abstract"]]
     join_text = [doc.split()
                  for doc in (data["title"] + " " + data["abstract"])]
 
@@ -108,7 +106,7 @@ def load_tsv_file(input_path: str) -> Tuple[List[int], List[List[str]]]:
 
 def load_tokens(input_path: str) -> Tuple[List[int], List[List[str]]]:
     """
-    Read from either a .TSV or a .NPY file the data.
+    Read from either a TSV or a NPY file the data.
 
     Parameters
     ----------
@@ -125,7 +123,7 @@ def load_tokens(input_path: str) -> Tuple[List[int], List[List[str]]]:
     elif input_path.endswith(".npy"):
         return load_numpy_file(input_path)
     else:
-        logging.error("Input must be a .TSV or .NPY file.")
+        logging.error("Input must be a TSV or NPY file.")
         sys.exit("Unrecognize input file extension.")
 
 
@@ -174,8 +172,8 @@ def generate_doc2vec_model(
         list.
     params : dict, optional
         Dictionary containing the parameters to create the Doc2Vec model, by
-        default { "vector_size": 200, "window": 5, "min_count": 5, "epochs": 5,
-        "workers": 4}
+        default {"vector_size": 200, "window": 5, "min_count": 5, "epochs": 5,
+        "workers": 4}.
 
     Returns
     -------
@@ -183,7 +181,6 @@ def generate_doc2vec_model(
         Doc2Vec model.
     """
 
-    #model = Doc2Vec(vector_size=200, window=5, min_count=1, epochs=5, workers = 4)
     model = Doc2Vec(**params)
     model.build_vocab(tagged_data)
 
@@ -209,9 +206,6 @@ def train_doc2vec_model(model: Doc2Vec, tagged_data: TaggedDocument, verbose: in
         * 2: to receive the total training time and where the epochs 
             start/finish.
     """
-    if not verbose in [0, 1, 2]:
-            logger.warning("Not a valid verbose value. Defaults to 0.")
-            verbose = 0
     epoch_logger = EpochLogger()
     callbacks = [epoch_logger]
     start_time = time.time()
@@ -220,7 +214,7 @@ def train_doc2vec_model(model: Doc2Vec, tagged_data: TaggedDocument, verbose: in
         logger.setLevel(logging.WARNING)
     elif verbose == 1:
         logger.setLevel(logging.INFO)
-    elif verbose == 2:
+    elif verbose > 1:
         logger.setLevel(logging.DEBUG)
     
     model.train(tagged_data, total_examples=model.corpus_count,
@@ -243,11 +237,9 @@ def save_doc2vec_model(model: Doc2Vec, output_path: str) -> None:
     """
     model.save(output_path)
 
-def save_doc2vec_embeddings(model: Doc2Vec, pmids: List[int], output_path: str, one_file: bool = True):
+def save_doc2vec_embeddings(model: Doc2Vec, pmids: List[int], output_path: str):
     """
-    Stores all the embeddings into a single file .npy file. The structure saved
-    is a dictionary where the keys are the PMIDs and the values are the
-    embeddings themselves.
+    Stores all the embeddings into a single file PKL file.
 
     Parameters
     ----------
@@ -261,21 +253,44 @@ def save_doc2vec_embeddings(model: Doc2Vec, pmids: List[int], output_path: str, 
         Determines whether to store each embeddings individually or in a
         singles file. By default, True.
     """
-    if one_file:
-        embeddings_df = pd.DataFrame({"pmids": pmids, "embeddings" : model.dv.vectors.tolist()})
-        embeddings_df.sort_values(by = "pmids", ignore_index = True, inplace = True)
-        embeddings_df["pmids"] = embeddings_df["pmids"].apply(str)
-        embeddings_df.to_pickle(output_path)
-    else:
-        if os.path.isdir(output_path):
-            shutil.rmtree(output_path)
-            #logging.error("Directory already exists.")
-            #sys.exit("Input directory already exists.")
-        os.mkdir(output_path)
-        for pmid in pmids:
-            np.save(f"{output_path}/{pmid}.npy", model.dv[str(pmid)], allow_pickle=True)
+    embeddings_df = pd.DataFrame({"pmids": pmids, "embeddings" : model.dv.vectors.tolist()})
+    embeddings_df.sort_values(by = "pmids", ignore_index = True, inplace = True)
+    embeddings_df["pmids"] = embeddings_df["pmids"].apply(str)
+    embeddings_df.to_pickle(output_path)
 
-def hybrid_d2v_pipeline(input_path: str, params: List[int], verbose: int = 0) -> Doc2Vec:
+    # Additional code to store the embeddings in one file at a time. Currently
+    # unsupported:
+    
+    # if os.path.isdir(output_path):
+    #     shutil.rmtree(output_path)
+    #     #logging.error("Directory already exists.")
+    #     #sys.exit("Input directory already exists.")
+    # os.mkdir(output_path)
+    # for pmid in pmids:
+    #     np.save(f"{output_path}/{pmid}.npy", model.dv[str(pmid)], allow_pickle=True)
+
+def hybrid_d2v_pipeline(input_path: str, params: dict, verbose: int = 0) -> Doc2Vec:
+    """
+    Pipeline to generate and train the model from the input tokens.
+
+    Parameters
+    ----------
+    input_path : str
+        Input path for the file.
+    params : dict
+        Dictionary containing the parameters to create the Doc2Vec model
+    verbose: int, optional
+        Determines the logging level of the training. 
+        * 0: to not receive any information.
+        * 1: to receive the total training time.
+        * 2: to receive the total training time and where the epochs 
+            start/finish.
+
+    Returns
+    -------
+    model: Doc2Vec
+        Doc2Vec model.
+    """
     pmids, join_text = load_tokens(input_path)
     tagged_data = generate_TaggedDocument(pmids, join_text)
     model = generate_doc2vec_model(tagged_data, params)
@@ -314,8 +329,8 @@ if __name__ == "__main__":
 
     model = generate_doc2vec_model(tagged_data, params_d2v)
     train_doc2vec_model(model, tagged_data, verbose = 1)
+
     if(args.output):
         save_doc2vec_model(model, output_path)
-
     if(args.embeddings):
-        save_doc2vec_embeddings(model, pmid, args.embeddings, one_file = True)
+        save_doc2vec_embeddings(model, pmid, args.embeddings)

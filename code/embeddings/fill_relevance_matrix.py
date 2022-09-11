@@ -1,5 +1,5 @@
 """
-This file contains the necessary functions to fill the a given relevance matrix
+This file contains the necessary functions to fill a given relevance matrix
 with a fourth column containing the cosine similarity calculated from a given
 model. If you want to fill a relevance matrix from the embeddings themselves
 and not from the model, please refer to this
@@ -8,7 +8,10 @@ and not from the model, please refer to this
 Example
 -------
 To execute the script, you can run the following command:
-    python code/embeddings/fill_relevance_matrix.py --input_rm data/RELISH/RELISH_relevance_matrix.tsv --input_model data/RELISH/RELISH_hybrid_d2v.model --output data/RELISH/RELISH_filled_relevance_matrix.tsv --verbose 1
+
+    $ python code/embeddings/fill_relevance_matrix.py --input_rm data/RELISH/RELISH_relevance_matrix.tsv --input_model data/RELISH/RELISH_hybrid.model --output data/RELISH/RELISH_filled_relevance_matrix.tsv --verbose 1
+
+    $ python code/embeddings/fill_relevance_matrix.py --input_rm data/TREC/TREC_relevance_matrix.tsv --input_model data/TREC/TREC_hybrid.model --output data/TREC/TREC_filled_relevance_matrix.tsv --verbose 1
 """
 import sys
 
@@ -24,7 +27,7 @@ from gensim.models.doc2vec import Doc2Vec
 logging.basicConfig(format='%(asctime)s %(message)s')
 logger = logging.getLogger(__name__)
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __author__ = "Guillermo Rocamora Pérez"
 
 def verify_matrix_columns(data: pd.DataFrame) -> pd.DataFrame:
@@ -56,21 +59,22 @@ def verify_matrix_columns(data: pd.DataFrame) -> pd.DataFrame:
         
 def load_relevance_matrix(input_path: str) -> pd.DataFrame:
     """
-    Reads a .TSV file containing the relevance matrix. At least two columns are
+    Reads a TSV file containing the relevance matrix. At least two columns are
     required with the PMIDs to compare.
 
     If the relevance matrix is used to optimize the model parameters or to find
     the cut points using the distribution analysis, a third column containing
-    the relevance (RELISH) or group (TREC) is required.
+    the relevance (RELISH), group (TREC simplified) or Rel-2d (TREC repurposed)
+    is required.
 
-    The function "verify_matrix_columns" controls if the input .TSV file
+    The function "verify_matrix_columns" controls if the input TSV file
     contains the valid columns. This function also renames the valid columns
     "PMID1" and "PMID2".
 
     Parameters
     ----------
     input_path : str
-        Input path for the .TSV relevance matrix file.
+        Input path for the TSV relevance matrix file.
 
     Returns
     -------
@@ -80,7 +84,7 @@ def load_relevance_matrix(input_path: str) -> pd.DataFrame:
         TREC) is required.
     """
     if not input_path.endswith(".tsv"):
-        logger.warning("Input path is not a valid .TSV file. Please provide a .TSV file to avoid possible errors.")
+        logger.warning("Input path is not a valid TSV file. Please provide a TSV file to avoid possible errors.")
 
     data = pd.read_csv(input_path, sep = "\t")
     verify_matrix_columns(data)
@@ -88,11 +92,26 @@ def load_relevance_matrix(input_path: str) -> pd.DataFrame:
 
     return data
 
-def load_filled_relevance_matrix(input_path: str) -> pd.DataFrame: 
+def load_filled_relevance_matrix(input_path: str) -> pd.DataFrame:
+    """
+    Loads an already filled relevance matrix.
+
+    Parameters
+    ----------
+    input_path : str
+        Path to the input relevance matrix.
+
+    Returns
+    -------
+    pd.DataFrame
+        Dataframe with at least three columns: PMID1, PMID2.
+    """
     if not input_path.endswith(".tsv"):
-        logger.warning("Input path is not a valid .TSV file. Please provide a .TSV file to avoid possible errors.")
+        logger.warning("Input path is not a valid TSV file. Please provide a TSV file to avoid possible errors.")
 
     data = pd.read_csv(input_path, sep = "\t")
+    verify_matrix_columns(data)
+
     return data
 
 def load_d2v_model(d2v_model_path: str) -> Doc2Vec:
@@ -139,11 +158,9 @@ def calculate_cosine_similarity(model: Doc2Vec, pmid_1: int, pmid_2: int) -> flo
 
 def fill_relevance_matrix(rel_matrix: pd.DataFrame, model: Doc2Vec, verbose: int = 0, percentage_log: int = 5) -> pd.DataFrame:
     """
-    Fills the relevance matrix with an aditional column named "Cosine
-    Similarity". Because of different naming convections, the dataset from
-    which the relevance matrix is constructed needs to be indicated.
-
-    UNDER DEVELOPMENT.
+    Fills the relevance matrix with an additional column named "Cosine
+    Similarity". The PMID of both publications need to be indicated in the
+    columns: PMID1 and PMID2.
 
     Parameters
     ----------
@@ -153,8 +170,8 @@ def fill_relevance_matrix(rel_matrix: pd.DataFrame, model: Doc2Vec, verbose: int
         Doc2Vec trained model.
     verbose: int, optional
         Determines the logging level of the training. 
-        * 0: to not receive any information.
-        * 1: to receive the total filling time.
+        * 0: to not receive any information. 
+        * 1: to receive the total filling time. 
         * 2: to receive the total filling time and notification percentage.
     percentage_log: int, optional
         If verbose is set to 2, the percentage in which to notify.
@@ -165,10 +182,6 @@ def fill_relevance_matrix(rel_matrix: pd.DataFrame, model: Doc2Vec, verbose: int
         DataFrame containing the PMIDs to be compared with an additional column
         containing the Cosine Similarity.
     """
-    if not verbose in [0, 1, 2]:
-            logger.warning("Not a valid verbose value. Defaults to 0.")
-            verbose = 0
-
     pmid_1_name = "PMID1"
     pmid_2_name = "PMID2"
     rel_matrix["Cosine Similarity"] = ""
@@ -177,14 +190,13 @@ def fill_relevance_matrix(rel_matrix: pd.DataFrame, model: Doc2Vec, verbose: int
         logger.setLevel(logging.WARNING)
     elif verbose == 1:
         logger.setLevel(logging.INFO)
-    elif verbose == 2:
+    elif verbose > 1:
         logger.setLevel(logging.DEBUG)
 
     total_rows = len(rel_matrix)
     divisions = 100/percentage_log
     intervals = math.floor(total_rows/divisions)
     if intervals == 0: intervals = 1
-        #logger.warning("There are not enough comparisons to properly log the filling process.")
 
     start_time = time.time()
     for i, row in rel_matrix.iterrows():
@@ -205,10 +217,11 @@ def fill_relevance_matrix(rel_matrix: pd.DataFrame, model: Doc2Vec, verbose: int
 
 def fill_relevance_matrix_multiprocess(rel_matrix: pd.DataFrame, model: Doc2Vec, num_processes: int = None, verbose: int = 0) -> pd.DataFrame:
     """
-    Fills the relevance matrix with an aditional column named "Cosine
-    Similarity". Because of different naming convections, the dataset from
-    which the relevance matrix is constructed needs to be indicated. It uses
-    multiple threads to accelerate the calculations.
+    Fills the relevance matrix with an additional column named "Cosine
+    Similarity". The PMID of both publications need to be indicated in the
+    columns: PMID1 and PMID2. 
+    
+    It uses multiple threads to accelerate the calculations.
 
     Parameters
     ----------
@@ -223,7 +236,6 @@ def fill_relevance_matrix_multiprocess(rel_matrix: pd.DataFrame, model: Doc2Vec,
         Determines the logging level of the training. 
         * 0: to not receive any information.
         * 1: to receive the total filling time.
-
 
     Returns
     -------
@@ -252,9 +264,11 @@ def fill_relevance_matrix_multiprocess(rel_matrix: pd.DataFrame, model: Doc2Vec,
     chunks = [rel_matrix.iloc[rel_matrix.index[i:i + chunk_size]] for i in range(0, rel_matrix.shape[0], chunk_size)]
     
     start_time = time.time()
+    # Fill each chunk in parallel
     with mp.Pool(num_processes) as p:
         results = p.starmap(fill_relevance_matrix, zip(chunks, repeat(model)))
 
+    # Combine the chunks
     for i in range(len(results)):
         rel_matrix.at[results[i].index] = results[i]
     
@@ -278,11 +292,35 @@ def save_rel_matrix(rel_matrix: pd.DataFrame, output_path: str) -> None:
     """
     rel_matrix.to_csv(output_path, index=False, sep="\t")
 
-def hybrid_relevance_matrix_pipeline(input_path: str, model: Doc2Vec, multiprocess: bool = True, verbose: int = 0) -> pd.DataFrame:
+def hybrid_relevance_matrix_pipeline(input_path: str, model: Doc2Vec, multiprocess: bool = True, verbose: int = 0, num_processes = None) -> pd.DataFrame:
+    """
+    Pipeline to fill a relevance matrix given in the input
+
+    Parameters
+    ----------
+    input_path : str
+        Input path for the TSV relevance matrix file.
+    model : Doc2Vec
+        Doc2Vec trained model.
+    multiprocess : bool, optional
+        Whether to use multiprocessing or not, by default True
+    verbose : int, optional
+        Determines the logging level of the training. 
+        * 0: to not receive any information. 
+        * 1: to receive the total filling time.
+    num_processes : int, optional
+        Number of cores to use in the multiprocess filling. By default, the
+        total number of cores of the system.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the compared PMIDs and their Cosine Similarity.
+    """
     relevance_matrix = load_relevance_matrix(input_path)
 
     if multiprocess:
-        fill_relevance_matrix_multiprocess(relevance_matrix, model, verbose=verbose)
+        fill_relevance_matrix_multiprocess(relevance_matrix, model, verbose=verbose, num_processes = num_processes)
     else:
         fill_relevance_matrix(relevance_matrix, model, verbose=verbose)
     
@@ -293,10 +331,10 @@ if __name__ == "__main__":
 
     parser.add_argument("--input_rm", type=str, help="Input path to the relevance matrix to fill.", required=True)
     parser.add_argument("--input_model", type=str, help="Input path to the Doc2Vec model.", required = True)
-    parser.add_argument("--output", type=str, help="Output path to the filled relevance matrix", required = True)
-    parser.add_argument("--verbose", type=int, default=1, help="The level of information logged in the process")
-    parser.add_argument("--multithread", type=int, default=0, choices=[0, 1], help="Whether to use multiprocessing or not. It is recommeded to set to 1. Optionally, set the number of cores to be used with 'num_cores' argument.")
-    parser.add_argument("--num_cores", type=int, default=None, help="Number of cores to use if multiprocesing is available. By default, leave to 'None' to use all cores.")
+    parser.add_argument("--output", type=str, help="Output path to the filled relevance matrix.", required = True)
+    parser.add_argument("--verbose", type=int, default=1, help="The level of information logged in the process.")
+    parser.add_argument("--multithread", type=int, default=1, choices=[0, 1], help="Whether to use multiprocessing or not. It is recommended to set to 1. Optionally, set the number of cores to be used with 'num_cores' argument.")
+    parser.add_argument("--num_cores", type=int, default=None, help="Number of cores to use if multiprocessing is available. By default, leave to 'None' to use all cores.")
 
     args = parser.parse_args()
     data = load_relevance_matrix(args.input_rm)
@@ -308,18 +346,3 @@ if __name__ == "__main__":
         filled_data = fill_relevance_matrix(data, model, verbose = args.verbose)
 
     save_rel_matrix(filled_data, args.output)
-
-# data = load_relevance_matrix("../../../data_full/RELISH/RELISH_relevance_matrix.tsv")
-# model = load_d2v_model("../../../data_full/RELISH/RELISH_hybrid_d2v.model")
-# fill_relevance_matrix_multiprocess(data, model, verbose = 1)
-# save_rel_matrix(data, "../../../data_full/RELISH/RELISH_filled_relevance_matrix.tsv")
-
-# data = load_relevance_matrix("../../../data_full/TREC/TREC_simplified_relevance_matrix.tsv")
-# model = load_d2v_model("../../../data_full/TREC/TREC_hybrid_d2v.model")
-# fill_relevance_matrix_multiprocess(data, model, verbose = 1)
-# save_rel_matrix(data, "../../../data_full/TREC/TREC_filled_simplified_relevance_matrix.tsv")
-
-# data = load_relevance_matrix("../../../data_full/TREC/TREC_repurposed_matrix.tsv")
-# model = load_d2v_model("../../../data_full/TREC/TREC_hybrid_d2v.model")
-# fill_relevance_matrix_multiprocess(data, model, verbose = 1)
-# save_rel_matrix(data, "../../../data_full/TREC/TREC_filled_repurposed_matrix.tsv")
