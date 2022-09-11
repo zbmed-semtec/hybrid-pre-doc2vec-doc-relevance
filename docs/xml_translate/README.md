@@ -14,22 +14,33 @@ Import the necessary class to process the files:
 
 
 ```python
-import sys
-sys.path.append('../../code/xml_translate/')
+#%load_ext autoreload
+#%autoreload 2
 
-from xml_translate import XMLtrans, translate_pipeline
+import os
+import sys
+
+import logging
+
+repository_path = os.path.expanduser("~/hybrid-dictionary-ner-doc2vec-doc-relevance")
+
+sys.path.append(f"{repository_path}/code/xml_translate/")
+os.chdir(repository_path)
+
+import xml_translate as xml_t
+
+logging.basicConfig(format='%(asctime)s %(message)s')
 ```
 
 ## Step 2:
 
-Define the input and output paths. Creates the output directory if needed. We will also export the articles to a .TSV file, so indicate the path as well.
+Define the input and output paths. Creates the output directory if needed. We will also export the articles to a TSV file, so indicate the path as well.
 
 
 ```python
-import os
-input_path = "../../data/sample_annotated_xml"
-output_path = "../../data/sample_annotated_xml_translated"
-output_tsv = "../../data/sample_annotated_xml.tsv"
+input_path = "data/sample_annotated_xml"
+output_path = "data/sample_annotated_xml_translated"
+output_tsv = "data/sample_annotated_xml_translated.tsv"
 
 if not os.path.isdir(output_path): os.mkdir(output_path)
 ```
@@ -51,7 +62,7 @@ Loop through the input files. For each input, it creates a `XMLtrans` object and
 
 ```python
 for i, file in enumerate(input_files):
-    xml_translation = XMLtrans(file)
+    xml_translation = xml_t.XMLtrans(file)
     xml_translation.translate()
     xml_translation.save_xml(output_files[i])
 ```
@@ -60,8 +71,11 @@ To export every XML file to a single TSV, run the pipeline function:
 
 
 ```python
-translate_pipeline(input_files, output_tsv)
+xml_t.translate_pipeline(input_files, output_tsv)
 ```
+
+
+
 
 <div>
 <table border="1" class="dataframe">
@@ -76,51 +90,51 @@ translate_pipeline(input_files, output_tsv)
   <tbody>
     <tr>
       <th>0</th>
-      <td>18394048</td>
-      <td>Effect of MeSHD000077287 on MeSHD000071080: a ...</td>
-      <td>BACKGROUND AND PURPOSE: We studied the effect ...</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>18363035</td>
-      <td>A MeSHD016678-wide MeSHD046228 reveals anti-in...</td>
-      <td>OBJECTIVE: Paeony root has long been used for ...</td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>18366698</td>
       <td>The MeSHQ000706 of biomedicine, complementary ...</td>
       <td>BACKGROUND: Studies have shown that a signific...</td>
     </tr>
     <tr>
-      <th>3</th>
+      <th>1</th>
+      <td>10624815</td>
+      <td>MeSHD001053 E polymorphisms and MeSHD010300.</td>
+      <td>The MeSHD001053 E (APOE) MeSHD011110 has been ...</td>
+    </tr>
+    <tr>
+      <th>2</th>
       <td>10627593</td>
       <td>Presynaptic Ca(2+) influx at a MeSHD051379 cen...</td>
       <td>Genetic alterations in Ca(2+) channel subunits...</td>
     </tr>
     <tr>
+      <th>3</th>
+      <td>18363035</td>
+      <td>A MeSHD016678-wide MeSHD046228 reveals anti-in...</td>
+      <td>OBJECTIVE: Paeony root has long been used for ...</td>
+    </tr>
+    <tr>
       <th>4</th>
-      <td>10642555</td>
-      <td>Rad6-dependent MeSHD054875 of MeSHD006657 H2B ...</td>
-      <td>Although ubiquitinated MeSHD006657 are present...</td>
+      <td>10648631</td>
+      <td>Mutational MeSHQ000032 of the highly conserved...</td>
+      <td>We have suggested previously that both the neg...</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>10609551</td>
-      <td>Individual variation in the expression profile...</td>
-      <td>MeSHD009538 evokes dose-dependent and often va...</td>
+      <td>18393066</td>
+      <td>Producing MeSHD056804 using whole-MeSHD002477 ...</td>
+      <td>This MeSHD012106 examined the effect of using ...</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>18401010</td>
-      <td>MeSHD006224 MeSHD013075: MeSHD012380 of MeSHD0...</td>
-      <td>Recently, we demonstrated that MeSHD019289 MeS...</td>
+      <td>10629618</td>
+      <td>MeSHD006360 associated with MeSHD004260 MeSHD0...</td>
+      <td>Two MeSHD004798 of MeSHD004260 (BER), MeSHD051...</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>18370348</td>
-      <td>[MeSHD009369 search with MeSHD004058-weighted ...</td>
-      <td>PURPOSE: Assessment of fat-suppressing MeSHD00...</td>
+      <td>18371110</td>
+      <td>MeSHD001853 trephine MeSHQ000033 and immunohis...</td>
+      <td>Chronic myelomonocytic leukaemia (CMML) is a c...</td>
     </tr>
     <tr>
       <th>8</th>
@@ -130,69 +144,69 @@ translate_pipeline(input_files, output_tsv)
     </tr>
     <tr>
       <th>9</th>
-      <td>10629618</td>
-      <td>MeSHD006360 associated with MeSHD004260 MeSHD0...</td>
-      <td>Two MeSHD004798 of MeSHD004260 (BER), MeSHD051...</td>
+      <td>18394048</td>
+      <td>Effect of MeSHD000077287 on MeSHD000071080: a ...</td>
+      <td>BACKGROUND AND PURPOSE: We studied the effect ...</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>18369322</td>
-      <td>Absence of retroviral vector-mediated transfor...</td>
-      <td>There is considerable concern regarding the tr...</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>10624815</td>
-      <td>MeSHD001053 E polymorphisms and MeSHD010300.</td>
-      <td>The MeSHD001053 E (APOE) MeSHD011110 has been ...</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>10650943</td>
-      <td>Potential involvement of FRS2 in MeSHD007328 s...</td>
-      <td>Shp-2 is implicated in several MeSHD020794 sig...</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>18393066</td>
-      <td>Producing MeSHD056804 using whole-MeSHD002477 ...</td>
-      <td>This MeSHD012106 examined the effect of using ...</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>18371110</td>
-      <td>MeSHD001853 trephine MeSHQ000033 and immunohis...</td>
-      <td>Chronic myelomonocytic leukaemia (CMML) is a c...</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>10648631</td>
-      <td>Mutational MeSHQ000032 of the highly conserved...</td>
-      <td>We have suggested previously that both the neg...</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>10606228</td>
-      <td>Spontaneous and MeSHD009153-induced transforma...</td>
-      <td>Loss of MeSHQ000502 of MeSHD053843 (MMR) MeSHD...</td>
-    </tr>
-    <tr>
-      <th>17</th>
       <td>10671540</td>
       <td>The regulatory beta subunit of MeSHD047390 med...</td>
       <td>MeSHD047390 is a tetrameric MeSHD004798 compos...</td>
     </tr>
     <tr>
-      <th>18</th>
+      <th>11</th>
+      <td>18381570</td>
+      <td>BRAFV600E MeSHD009154 is associated with prefe...</td>
+      <td>CONTEXT: Mutually exclusive MeSHD009154 of RET...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>18401010</td>
+      <td>MeSHD006224 MeSHD013075: MeSHD012380 of MeSHD0...</td>
+      <td>Recently, we demonstrated that MeSHD019289 MeS...</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>10609551</td>
+      <td>Individual variation in the expression profile...</td>
+      <td>MeSHD009538 evokes dose-dependent and often va...</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>10642555</td>
+      <td>Rad6-dependent MeSHD054875 of MeSHD006657 H2B ...</td>
+      <td>Although ubiquitinated MeSHD006657 are present...</td>
+    </tr>
+    <tr>
+      <th>15</th>
       <td>18366613</td>
       <td>A MeSHD002678 MeSHD000069550-based MeSHD008722...</td>
       <td>BACKGROUND: The MeSHD011379 for many MeSHD0093...</td>
     </tr>
     <tr>
+      <th>16</th>
+      <td>18370348</td>
+      <td>[MeSHD009369 search with MeSHD004058-weighted ...</td>
+      <td>PURPOSE: Assessment of fat-suppressing MeSHD00...</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>10606228</td>
+      <td>Spontaneous and MeSHD009153-induced transforma...</td>
+      <td>Loss of MeSHQ000502 of MeSHD053843 (MMR) MeSHD...</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18369322</td>
+      <td>Absence of retroviral vector-mediated transfor...</td>
+      <td>There is considerable concern regarding the tr...</td>
+    </tr>
+    <tr>
       <th>19</th>
-      <td>18381570</td>
-      <td>BRAFV600E MeSHD009154 is associated with prefe...</td>
-      <td>CONTEXT: Mutually exclusive MeSHD009154 of RET...</td>
+      <td>10650943</td>
+      <td>Potential involvement of FRS2 in MeSHD007328 s...</td>
+      <td>Shp-2 is implicated in several MeSHD020794 sig...</td>
     </tr>
   </tbody>
 </table>
@@ -209,10 +223,10 @@ In order to translate one file, just create the `XMLtrans` object with the input
 
 ```python
 %%script false --no-raise-error
-input_file = "../../data/sample_annotated_xml/10605405_annotated.xml"
-output_file = "../../data/sample_annotated_xml/10605405_annotated_translated.xml"
+input_file = "data/sample_annotated_xml/10605405_annotated.xml"
+output_file = "data/sample_annotated_xml/10605405_annotated_translated.xml"
 
-xml_translation = XMLtrans(input_file)
+xml_translation = xml_t.XMLtrans(input_file)
 xml_translation.translate()
 xml_translation.save_xml(output_file)
 xml_translation.save_txt(output_file, split = True) # The split argument indicates whether to differentiate title and abstract.
@@ -238,14 +252,14 @@ Optionally, the output file/directory argument can be used to specify where shou
 
 * If a directory is provided, it will create a new directory with the same name but adding `_translated` to it.
 
-If you wish to output to a .TSV file, set the following argument to 1:
+If you wish to output to a TSV file, set the following argument to 1:
 
-* --tsv: default 0
+* --tsv: default 1
 
 An example of the command that will create the directory  `sample_annotated_xml_translated`:
 
 ```bash
-python xml_translate.py -d sample_annotated_xml
+python code/xml_translate/xml_translate.py -d sample_annotated_xml
 ```
 
 In the folder `code/tests`, a file containing unittest can be found.
@@ -350,19 +364,11 @@ The MeSHQ000706 of biomedicine, complementary and MeSHD000529, and MeSHD008519 f
 
 * The code does not assume the number of `passage` tags found in them, but it assumes that they all have an `infon` tag (to describe the passage) and a `text` tag which contains the text itself. 
 
-# TODO 
-
-* Improve error handling process. At the moment, if the XML file does not match the necessary structure, there is no indication to where the error is or how to deal with it.
-
-* Consider adding multiprocessing. There are around 200.000 documents, which takes around a minute and a half to execute. Multiprocessing functionality could be useful since the translation process is done one file at a time, and it should be easily parallelizable.
-
-**REMOVE THIS LINE BEFORE FINAL VERSION COMMIT**
-
-
+<!--
 ```python
-!jupyter nbconvert tutorial_xml_translate.ipynb --to markdown --output README.md
+!jupyter nbconvert docs/xml_translate/tutorial_xml_translate.ipynb --to markdown --output README.md
 ```
 
-    [NbConvertApp] Converting notebook tutorial_xml_translate.ipynb to markdown
-    [NbConvertApp] Writing 13102 bytes to README.md
-
+    [NbConvertApp] Converting notebook docs/xml_translate/tutorial_xml_translate.ipynb to markdown
+    [NbConvertApp] Writing 21262 bytes to docs/xml_translate/README.md
+-->

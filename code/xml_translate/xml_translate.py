@@ -1,21 +1,26 @@
 """
-This file aims to transform an annotated XML files obtained from
+This file aims to transform the annotated XML files obtained from
 [Whatizit](https://github.com/zbmed-semtec/whatizit-dictionary-ner) to plain
 text. The translation converts the tagged concepts by the dictionary to its
 corresponding MeSH ID.
 
 Example
 -------
-To execute the script, you can run the following command:
+To execute the script and generate a single TSV file, you can run the following
+command:
 
-    $ python xml_translate.py --indir ../../data/sample_annotated_xml
+    $ python code/xml_translate/xml_translate.py --indir data/sample_annotated_xml --output data/sample_annotated_xml_translated.tsv
+
+If you want an XML output for every file, execute the following command:
+    
+    $ python code/xml_translate/xml_translate.py --indir data/sample_annotated_xml --output data/sample_annotated_xml_translated --tsv 0
 
 Notes
 -----
 A more detailed tutorial can be found in
 [`docs/xml_translate`](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/blob/main/docs/xml_translate/tutorial_xml_translate.ipynb)
 """
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 __author__ = "Guillermo Rocamora Pérez"
 
 import os
@@ -37,12 +42,12 @@ logger = logging.getLogger(__name__)
 
 def argument_parser(args: argparse.ArgumentParser) -> Union[List[str], List[str]]:
     """
-    Reads the arguments and creates the necesary variables for the program
+    Reads the arguments and creates the necessary variables for the program to
     operate properly.
 
     Parameters
     ----------
-    args : argparse.ArgumentParser
+    args: argparse.ArgumentParser
         Arguments from argparse.
 
     Returns
@@ -98,7 +103,7 @@ class XMLtrans:
     namespace: dict
         Dictionary containing the namespace for the XML.
     trans_dict: dict
-        Dictionary containing the translation between concept an MeSH ID.
+        Dictionary containing the translation between concept a MeSH ID.
     tagged_texts: dict
         Dictionary containing the tagged text from the XML file split in title
         and abstract.
@@ -116,7 +121,8 @@ class XMLtrans:
             Path for input file.
         verify_integrity : bool, optional
             Whether to verify that all tagged concepts share the same MeSH ID,
-            by default False.
+            by default False. Behaviour not properly tested. Use at your own
+            risk.
         """
         try:
             self.tree = ET.parse(input_file)
@@ -127,6 +133,9 @@ class XMLtrans:
             sys.exit("Input file must have a valid XML format.")
 
         self.mesh_id_pattern = r"\/MESH\/(.*)"
+        
+        # Important: modify the namespace if necessary. The program will not
+        # recognize any annotation or MeSH ID if the namspace is not correct.
         self.namespace = {
             "z": "https://github.com/zbmed-semtec/whatizit-dictionary-ner#"}
 
@@ -160,8 +169,8 @@ class XMLtrans:
 
         Returns
         -------
-        mesh_id:
-            Text with thethe mesh ID.
+        mesh_id: str
+            Text with the mesh ID.
         """
         if tag.attrib.get("id"):
             mesh_id = "MeSH" + \
@@ -178,12 +187,14 @@ class XMLtrans:
         ----------
         verify_integrity : bool, optional
             Whether to verify that all tagged concepts share the same MeSH ID,
-            by default False.
+            by default False. Behaviour not properly tested. Use at your own
+            risk.
 
         Returns
         -------
         trans_dict: dict
-            The translation dictionary that matches between text and MeSH ID.
+            The translation dictionary that matches text to their corresponding
+            MeSH ID.
         """
         trans_dict = {}
 
@@ -225,7 +236,7 @@ class XMLtrans:
 
     def save_xml(self, file_out: str) -> None:
         """
-        Saves the modified output xml into the given path.
+        Saves the modified output XML into the given path.
 
         Parameters
         ----------
@@ -245,7 +256,7 @@ class XMLtrans:
     def output_text(self, split: bool = False) -> str:
         """
         Returns the modified text all joined or divided in title/abstract.
-        This functions is necessary to run the unittests.
+        This function is necessary to run the unittests.
 
         Parameters
         ----------
@@ -289,8 +300,7 @@ class XMLtrans:
 
 def translate_pipeline(files_in: List[str], output_file: str) -> pd.DataFrame:
     """
-    Pipeline to translate all input files and to output a tab separated value
-    file.
+    Pipeline to translate all input files and to output a TSV file.
 
     Parameters
     ----------
@@ -355,6 +365,3 @@ if __name__ == "__main__":
             xml_translation = XMLtrans(file)
             xml_translation.translate()
             xml_translation.save_xml(files_out[i])
-    #file = files_in[0]
-    #xml_translation = XMLtrans(file)
-    # xml_translation.translate()
