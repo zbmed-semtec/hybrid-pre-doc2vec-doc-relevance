@@ -89,6 +89,61 @@ for i in range(len(results)):
     rel_matrix.at[results[i].index] = results[i]
 ```
 
+# Hyperparameter optimization results
+
+All information related to the optimization can be found [here](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/tree/main/data/Hyperparameter_optimization). The best combination of hyperparameters are the following:
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Dataset</th>
+      <th>dm</th>
+      <th>epochs</th>
+      <th>min_count</th>
+      <th>vector_size</th>
+      <th>window</th>
+      <th>workers</th>
+      <th>AUC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>RELISH</th>
+      <td>1</td>
+      <td>15</td>
+      <td>5</td>
+      <td>256</td>
+      <td>5</td>
+      <td>8</td>
+      <th>0.5969</th>
+    </tr>
+    <tr>
+      <th>TREC simplified</th>
+      <td>0</td>
+      <td>15</td>
+      <td>0</td>
+      <td>256</td>
+      <td>5</td>
+      <td>16</td>
+      <th>0.6616</th>
+    </tr>
+    <tr>
+      <th>TREC repurposed</th>
+      <td>0</td>
+      <td>15</td>
+      <td>1</td>
+      <td>256</td>
+      <td>9</td>
+      <td>16</td>
+      <th>0.7828</th>
+    </tr>
+  </tbody>
+</table>
+<p>150 rows × 2 columns</p>
+</div>
+
+
 # Additional Notes
 
 * Every code file I have written is thought to be use both in a jupyter notebook (like in the documentations/tutorials), or as a script that can be run from the terminal itselft. Just type `python [file_name] --help` to obtain more information on how to use it.

@@ -67,7 +67,7 @@ hp_df = hp.hyperparameter_optimization_pipeline(hp_df_path, verbose = 0, dataset
 hp_df
 ```
 
-    2022-09-10 18:17:39,404 There is already a file in this path. To replace the file, please use 'overwrite = True'.
+    2022-09-11 12:21:16,890 There is already a file in this path. To replace the file, please use 'overwrite = True'.
 
 
 
@@ -457,7 +457,7 @@ hp_df
 
 ```python
 RELISH_best_hp = hp_df.iloc[hp_df['AUC'].idxmax()].apply(int).to_dict()
-del RELISH_best_hp["AUC"]
+RELISH_best_hp["AUC"] = hp_df.iloc[hp_df['AUC'].idxmax()]["AUC"]
 RELISH_best_hp
 ```
 
@@ -469,7 +469,8 @@ RELISH_best_hp
      'min_count': 5,
      'vector_size': 256,
      'window': 5,
-     'workers': 8}
+     'workers': 8,
+     'AUC': 0.5969}
 
 
 
@@ -479,6 +480,7 @@ input_tokens = "../data_full/RELISH/RELISH_tokens.tsv"
 input_frm = "../data_full/RELISH/RELISH_relevance_matrix.tsv"
 
 hp.logger.setLevel("INFO")
+del RELISH_best_hp["AUC"]
 filled_relevance_matrix = hp.hybrid_model_pipeline(RELISH_best_hp, input_tokens, input_frm, dataset = "RELISH", repurposed = False, verbose = 1)
 counting_table = ct.hp_create_counting_table(filled_relevance_matrix, dataset = "RELISH", repurposed=False)
 ROC.generate_roc_values(counting_table, dataset = "RELISH", repurposed = False)
@@ -488,13 +490,13 @@ ROC.draw_roc_curve(counting_table, draw_auc = True, output_path="data/Hyperparam
 
 ```
 
-    2022-09-10 18:17:50,088 	Previously generated model not found.
-    2022-09-10 18:18:01,539 	Generating model.
-    2022-09-10 18:18:13,670 	Training model.
-    2022-09-10 18:27:43,895 --- Time to train: 570.22 seconds
-    2022-09-10 18:27:43,898 	Previously generated filled relevance matrix not found.
-    2022-09-10 18:27:43,948 	Filling relevance matrix.
-    2022-09-10 18:28:12,815 --- Time to fill: 28.86 seconds
+    2022-09-11 12:21:17,385 	Previously generated model not found.
+    2022-09-11 12:21:29,391 	Generating model.
+    2022-09-11 12:21:41,157 	Training model.
+    2022-09-11 12:31:34,332 --- Time to train: 593.17 seconds
+    2022-09-11 12:31:34,335 	Previously generated filled relevance matrix not found.
+    2022-09-11 12:31:34,393 	Filling relevance matrix.
+    2022-09-11 12:32:04,525 --- Time to fill: 30.12 seconds
 
 
 
@@ -535,7 +537,7 @@ hp_df = hp.hyperparameter_optimization_pipeline(hp_df_path, verbose = 0, dataset
 hp_df
 ```
 
-    2022-09-10 18:02:07,331 There is already a file in this path. To replace the file, please use 'overwrite = True'.
+    2022-09-11 12:32:06,743 There is already a file in this path. To replace the file, please use 'overwrite = True'.
 
 
 
@@ -985,7 +987,7 @@ hp_df
 
 ```python
 TREC_best_hp = hp_df.iloc[hp_df['AUC'].idxmax()].apply(int).to_dict()
-del TREC_best_hp["AUC"]
+TREC_best_hp["AUC"] = hp_df.iloc[hp_df['AUC'].idxmax()]["AUC"]
 TREC_best_hp
 ```
 
@@ -997,7 +999,8 @@ TREC_best_hp
      'min_count': 0,
      'vector_size': 256,
      'window': 5,
-     'workers': 16}
+     'workers': 16,
+     'AUC': 0.6616}
 
 
 
@@ -1007,6 +1010,7 @@ input_tokens = "../data_full/TREC/TREC_tokens.tsv"
 input_frm = "../data_full/TREC/TREC_simplified_relevance_matrix.tsv"
 
 hp.logger.setLevel("INFO")
+del TREC_best_hp["AUC"]
 filled_relevance_matrix = hp.hybrid_model_pipeline(TREC_best_hp, input_tokens, input_frm, dataset = "TREC", repurposed = False, verbose = 1)
 counting_table = ct.hp_create_counting_table(filled_relevance_matrix, dataset = "TREC", repurposed=False)
 ROC.generate_roc_values(counting_table, dataset = "TREC", repurposed = False)
@@ -1015,13 +1019,13 @@ ct.plot_graph(counting_table, dataset = "TREC", normalize = True, best_cosine = 
 ROC.draw_roc_curve(counting_table, draw_auc = True, output_path="data/Hyperparameter_optimization/TREC_simplified_ROC.png")
 ```
 
-    2022-09-10 18:05:55,362 	Previously generated model not found.
-    2022-09-10 18:05:57,554 	Generating model.
-    2022-09-10 18:06:01,211 	Training model.
-    2022-09-10 18:07:30,256 --- Time to train: 89.04 seconds
-    2022-09-10 18:07:30,258 	Previously generated filled relevance matrix not found.
-    2022-09-10 18:07:36,254 	Filling relevance matrix.
-    2022-09-10 18:10:07,827 --- Time to fill: 149.73 seconds
+    2022-09-11 12:32:07,243 	Previously generated model not found.
+    2022-09-11 12:32:08,980 	Generating model.
+    2022-09-11 12:32:12,548 	Training model.
+    2022-09-11 12:33:37,590 --- Time to train: 85.04 seconds
+    2022-09-11 12:33:37,591 	Previously generated filled relevance matrix not found.
+    2022-09-11 12:33:43,082 	Filling relevance matrix.
+    2022-09-11 12:36:17,527 --- Time to fill: 152.58 seconds
 
 
 
@@ -1062,14 +1066,13 @@ hp_df = hp.hyperparameter_optimization_pipeline(hp_df_path, verbose = 0, dataset
 hp_df
 ```
 
-    2022-09-10 18:13:09,994 There is already a file in this path. To replace the file, please use 'overwrite = True'.
+    2022-09-11 12:36:29,711 There is already a file in this path. To replace the file, please use 'overwrite = True'.
 
 
 
 
 
 <div>
-
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1513,7 +1516,7 @@ hp_df
 
 ```python
 TREC_best_hp = hp_df.iloc[hp_df['AUC'].idxmax()].apply(int).to_dict()
-del TREC_best_hp["AUC"]
+TREC_best_hp["AUC"] = hp_df.iloc[hp_df['AUC'].idxmax()]["AUC"]
 TREC_best_hp
 ```
 
@@ -1525,7 +1528,8 @@ TREC_best_hp
      'min_count': 1,
      'vector_size': 256,
      'window': 9,
-     'workers': 16}
+     'workers': 16,
+     'AUC': 0.7828}
 
 
 
@@ -1535,6 +1539,7 @@ input_tokens = "../data_full/TREC/TREC_tokens.tsv"
 input_frm = "../data_full/TREC/TREC_repurposed_matrix.tsv"
 
 hp.logger.setLevel("INFO")
+del TREC_best_hp["AUC"]
 filled_relevance_matrix = hp.hybrid_model_pipeline(TREC_best_hp, input_tokens, input_frm, dataset = "TREC", repurposed = True, verbose = 1)
 counting_table = ct.hp_create_counting_table(filled_relevance_matrix, dataset = "TREC", repurposed=True)
 ROC.generate_roc_values(counting_table, dataset = "TREC", repurposed = True)
@@ -1543,13 +1548,13 @@ ct.plot_graph(counting_table, dataset = "TREC", repurposed=True, normalize = Tru
 ROC.draw_roc_curve(counting_table, draw_auc = True, output_path="data/Hyperparameter_optimization/TREC_repurposed_ROC.png")
 ```
 
-    2022-09-10 18:13:18,152 	Previously generated model not found.
-    2022-09-10 18:13:20,250 	Generating model.
-    2022-09-10 18:13:24,377 	Training model.
-    2022-09-10 18:14:46,898 --- Time to train: 82.52 seconds
-    2022-09-10 18:14:46,899 	Previously generated filled relevance matrix not found.
-    2022-09-10 18:14:50,186 	Filling relevance matrix.
-    2022-09-10 18:16:59,178 --- Time to fill: 128.28 seconds
+    2022-09-11 12:36:29,986 	Previously generated model not found.
+    2022-09-11 12:36:31,630 	Generating model.
+    2022-09-11 12:36:35,254 	Training model.
+    2022-09-11 12:38:03,295 --- Time to train: 88.04 seconds
+    2022-09-11 12:38:03,297 	Previously generated filled relevance matrix not found.
+    2022-09-11 12:38:06,343 	Filling relevance matrix.
+    2022-09-11 12:40:32,036 --- Time to fill: 145.04 seconds
 
 
 
@@ -1564,7 +1569,16 @@ ROC.draw_roc_curve(counting_table, draw_auc = True, output_path="data/Hyperparam
     
 
 
-
+<!-- 
 ```python
 !jupyter nbconvert data/Hyperparameter_optimization/Hyperparameter_optimization.ipynb --to markdown --output README.md
 ```
+
+    [NbConvertApp] Converting notebook data/Hyperparameter_optimization/Hyperparameter_optimization.ipynb to markdown
+    [NbConvertApp] Support files will be in README_files/
+    [NbConvertApp] Making directory data/Hyperparameter_optimization/README_files
+    [NbConvertApp] Making directory data/Hyperparameter_optimization/README_files
+    [NbConvertApp] Making directory data/Hyperparameter_optimization/README_files
+    [NbConvertApp] Making directory data/Hyperparameter_optimization/README_files
+    [NbConvertApp] Writing 35934 bytes to data/Hyperparameter_optimization/README.md
+-->
