@@ -135,7 +135,7 @@ class XMLtrans:
         self.mesh_id_pattern = r"\/MESH\/(.*)"
         
         # Important: modify the namespace if necessary. The program will not
-        # recognize any annotation or MeSH ID if the namspace is not correct.
+        # recognize any annotation or MeSH ID if the namespace is not correct.
         self.namespace = {
             "z": "https://github.com/zbmed-semtec/whatizit-dictionary-ner#"}
 
