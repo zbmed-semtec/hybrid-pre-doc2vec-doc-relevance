@@ -140,7 +140,6 @@ All information related to the optimization can be found [here](https://github.c
     </tr>
   </tbody>
 </table>
-<p>150 rows × 2 columns</p>
 </div>
 
 

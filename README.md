@@ -1,9 +1,9 @@
 # hybrid-dictionary-ner-doc2vec-doc-relevance
 
-An approach exploring the combination of a dictionary-based NER approach using Whatizit and Doc2Vec to develop a document-to-document recommendation system. This approach will explore the transformation of annotated XML files after the Whatizit processing into a plain text dataset, the required preprocessing of the text and the Doc2Vec model generation, training and evaluation.
+In this repository, an approach exploring the combination of a dictionary-based NER using Whatizit and Doc2Vec framework, was developed to generate a document-to-document recommendation system. This approach will explore the transformation of annotated XML files after the Whatizit processing into a plain text dataset, the required preprocessing of the text and the Doc2Vec model generation, training and evaluation.
 
-The main idea is to use a dictionary-based name entity recognition to group different medical terms in one individual term. To do so, we use the Whatizit text processing system developed by the Rebholz Research Group at [EMBL-EBI](https://www.ebi.ac.uk/). Once the terms are annotated, we replace these  
-annotations by their MeSH ID. For example, the dictionary will recognize every entry of the term "mechanism of action" all will make add an XML tag around it. Our pipeline will then replace the whole tag by its MeSH ID, specifically [MeSHQ000494](http://purl.bioontology.org/ontology/MESH/Q000494).
+The main idea is to use a dictionary-based name entity recognition to group different medical terms into a single entity. To do so, we use the Whatizit text processing system developed by the Rebholz Research Group at [EMBL-EBI](https://www.ebi.ac.uk/). Once the terms are annotated, we replace these  
+annotations by their MeSH ID. For example, the dictionary will recognize every entry of the term "mechanism of action" all will add an XML tag around it. Our pipeline will then replace the whole tag by its MeSH ID, specifically for this term: [MeSHQ000494](http://purl.bioontology.org/ontology/MESH/Q000494).
 
 Once we have the title and abstract of a publication with their medical terms substituted by their MeSH ID, we apply a standard Doc2Vec process to generate embeddings. Then, using the cosine similarity between two different publications, we will rank their similarity from 0 to 1.
 
@@ -115,7 +115,7 @@ These structure words usually follow a pattern: most of them are in capital lett
 
 The main idea is:
 
-1. Loop through every publication title and abstract and match a regular expression to find the structure words. At the same time, count in how many publications each structure word appears.
+1. Loop through every publication abstract and match a regular expression to find the structure words. At the same time, count in how many publications each structure word appears.
 
 2. Since we are applying a regular expression, some false positives might be found (certain acronyms for example). Since we don't want to remove relevant terms that may follow the regular expression, we apply a minimum frequency of appearance threshold. The standard is to require a matched structure word to appear in at least 0.01% of all publications. We create a [list of these structure words](https://github.com/zbmed-semtec/medline-preprocessing/blob/main/data/Structure_Words_removal/structure_word_list_pruned.txt). It is possible to modify the minimum frequency of appearance by applying a different threshold. More information can be found in the corresponding documentation.
 
@@ -139,6 +139,8 @@ To describe the development of evidence-based electronic prescribing (e-prescrib
 </table>
 
 ### Text cleaning and tokenization
+
+[Main documentation](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/tree/main/docs/preprocessing)
 
 The cleaning process is also described in the [medline-preprocessing repository](https://github.com/zbmed-semtec/medline-preprocessing) ([main documentation](https://github.com/zbmed-semtec/medline-preprocessing/blob/main/docs/Phrase_Preprocessing_Tutorial/tutorial_phrase_preprocessing.ipynb)). However, a specific preprocessing was developed for the hybrid approach ([specific documentation](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/tree/main/docs/preprocessing)) since it does not have the same requirements as other approaches.
 
@@ -171,7 +173,7 @@ despite the high meshq000453 of meshd010300 the meshq000503 of its gastrointesti
 
 [Main documentation](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/tree/main/docs/embeddings)
 
-With the text cleaned, we can now start to generate the embeddings. To do so, we will the [Doc2Vec](https://radimrehurek.com/gensim/models/doc2vec.html) framework provided by [Gensim](https://radimrehurek.com/gensim/). The process can be described as follows:
+With the text cleaned, we can now start to generate the embeddings. To do so, we will use the [Doc2Vec](https://radimrehurek.com/gensim/models/doc2vec.html) framework provided by [Gensim](https://radimrehurek.com/gensim/). The process can be described as follows:
 
 1. Generate the `TaggedDocuments` to match every PMID to a list of words. In this step, the abstract and the title are combined into a single paragraph (or document).
 
