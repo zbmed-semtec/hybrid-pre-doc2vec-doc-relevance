@@ -232,7 +232,7 @@ xml_translation.save_xml(output_file)
 xml_translation.save_txt(output_file, split = True) # The split argument indicates whether to differentiate title and abstract.
 ```
 
-## Use `xml_translatepython.py` file directly
+## Use `xml_translate.py` as a script
 
 The code file itself is prepared to work on their own given some parameters. In order to execute the script, run the following command:
 
