@@ -5,9 +5,9 @@ To begin the process, you need the XML annotated files that Rohitha uploaded to 
 * [RELISH](https://drive.google.com/drive/u/0/folders/1qfHIWN2ncfboqtigF3DKOFiQFFYnTWI0)
 * [TREC](https://drive.google.com/drive/u/0/folders/1wQ_ys557E3E3opQUuSWSPmtltyqLALm4)
 
-In my home directory I have a folder called `data_full`, and two subfolders called `RELISH` and `TREC`. I unzipped both datasets in their corresponding folder, so that I had the RELISH files in `~/data_full/RELISH/RELISH_annotated_xmls` and TREC in `~/data_full/TREC/TREC_annotated_xmls`.
+In my home directory, I have a folder called `data_full`, and two subfolders called `RELISH` and `TREC`. I unzipped both datasets in their corresponding folder, so that I had the RELISH files in `~/data_full/RELISH/RELISH_annotated_xmls` and TREC in `~/data_full/TREC/TREC_annotated_xmls`.
 
-I also deleted the file `26740972_annotated.xml` in RELISH and 8914767_annotated.xml in `TREC`, since they used to have an abstract, but it later runs they are markes as missing PMIDs. 
+I also deleted the file `26740972_annotated.xml` in RELISH and 8914767_annotated.xml in `TREC`, since they used to have an abstract, but it later runs they are marked as missing PMIDs. 
 
 I also recommend that you have both the `hybrid-dictionary-ner-doc2vec-doc-relevance` and `medline-preprocessing` repositories downloaded to your home directory.
 
@@ -57,21 +57,21 @@ python code/embeddings/create_model.py --input ../data_full/TREC/TREC_tokens.tsv
 ```
 If you want to save the model too, add the argument `--output [model path]`.
 
-## Additional files
+## Fill relevance matrix
 
 You can also find a `fill_relevance_matrix.py` inside the `code/embeddings` folder. It is primarily used to fill a relevance matrix given a model. Another approach is the [script](https://github.com/zbmed-semtec/medline-preprocessing/tree/main/code/Cosine_Similarity) uploaded by Rohitha that uses the output embeddings, instead of the model.
 
 Either way, you can run this script with the following command:
 
 ```bash
-python code/embeddings/fill_relevance_matrix.py --input_rm ../data_full/RELISH/RELISH_relevance_matrix.tsv --input_model ../data_full/RELISH/RELISH_hybrid_d2v.model --output ../data_full/RELISH/RELISH_filled_relevance_matrix.tsv --verbose 1
+python code/embeddings/fill_relevance_matrix.py --input_rm ../data_full/RELISH/RELISH_relevance_matrix.tsv --input_model ../data_full/RELISH/RELISH_hybrid.model --output ../data_full/RELISH/RELISH_filled_relevance_matrix.tsv --verbose 1
 
-python code/embeddings/fill_relevance_matrix.py --input_rm ../data_full/TREC/TREC_simplified_relevance_matrix.tsv --input_model ../data_full/TREC/TREC_hybrid_d2v.model --output ../data_full/TREC/TREC_simplified_filled_relevance_matrix.tsv --verbose 1
+python code/embeddings/fill_relevance_matrix.py --input_rm ../data_full/TREC/TREC_simplified_relevance_matrix.tsv --input_model ../data_full/TREC/TREC_hybrid.model --output ../data_full/TREC/TREC_simplified_filled_relevance_matrix.tsv --verbose 1
 
-python code/embeddings/fill_relevance_matrix.py --input_rm ../data_full/TREC/TREC_repurposed_relevance_matrix.tsv --input_model ../data_full/TREC/TREC_hybrid_d2v.model --output ../data_full/TREC/TREC_repurposed_filled_relevance_matrix.tsv --verbose 1
+python code/embeddings/fill_relevance_matrix.py --input_rm ../data_full/TREC/TREC_repurposed_relevance_matrix.tsv --input_model ../data_full/TREC/TREC_hybrid.model --output ../data_full/TREC/TREC_repurposed_filled_relevance_matrix.tsv --verbose 1
 ```
 
-In this file, I use multiprocessing to efficiently fill the relevance matrix. I recommend you to chek it, since maybe it can also be implemented elsewhere and it cut the execution time a reasonable amount (25 minutes to fill TREC relevance matrix to just 2 minutes).
+In this file, I use multiprocessing to efficiently fill the relevance matrix. I recommend you to check it, since maybe it can also be implemented elsewhere, and it cut the execution time a reasonable amount (25 minutes to fill TREC relevance matrix to just 2 minutes).
 
 ```python
 num_processes = mp.cpu_count()
@@ -91,10 +91,10 @@ for i in range(len(results)):
 
 # Additional Notes
 
-* Every code file I have written is thought to be use both in a jupyter notebook (like in the documentations/tutorials), or as a script than can be run from the terminal itselft. Just type `python [file_name] --help` to obtain more information on how to use it.
+* Every code file I have written is thought to be use both in a jupyter notebook (like in the documentations/tutorials), or as a script that can be run from the terminal itselft. Just type `python [file_name] --help` to obtain more information on how to use it.
 
-* One thing you will notice from my code is that I really like to give options to the end user. My functions tend to have a lot of arguments to modify the behaviour to suit the user need. Unfortunatelly, that sometimes means that my functions are hard to understand to other coders. 
+* One thing you will notice from my code is that I really like to give options to the end user. My functions tend to have a lot of arguments to modify the behaviour to suit the user need. Unfortunately, that sometimes means that my functions are hard to understand to other coders. 
 
-* Something that can be improved from my code are the error handling problems, where sometimes it is hard understand where an error is.
+* Something that can be improved from my code are the error handling problems, where sometimes it is hard to understand where an error is.
 
-If for whatever reason any one need some help to understand, modify or use this code/repository, please don't hesitate to contact me via email at: guillermorocamora@gmail.com
+If for whatever reason anyone need some help to understand, modify or use this code/repository, please don't hesitate to contact me via email at: guillermorocamora@gmail.com

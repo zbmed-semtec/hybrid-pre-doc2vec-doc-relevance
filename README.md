@@ -62,7 +62,7 @@ The goal is to convert the annotations in the XML files into a MeSH ID. As menti
 
 2. Create a `translation_dictionary`, where every term is associated to a MeSH ID.
 
-3. Replace ocurrence of a term inside the `translation_dictionary` by their MeSH ID.
+3. Replace occurrences of a term inside the `translation_dictionary` by their MeSH ID.
 
 4. Store all the translated XML files into a single TSV file with three columns: PMID, title, abstract. Optionally, the files can be individually saved into a TXT.
 
@@ -109,15 +109,15 @@ The next step is to apply some preprocessing to the publications. This process i
 
 [Main documentation](https://github.com/zbmed-semtec/medline-preprocessing/tree/main/docs/Structure_Words_removal).
 
-Both the code and the documentation is located in the [medline-preprocessing repository](https://github.com/zbmed-semtec/medline-preprocessing) since it is a common step in every document-to-document similarity approach. We defined as "Structure words" those terms that are introduced in the text to better structure the abstract. In the table shown above, we can see that for example the words "BACKGROUND: " and "OBJECTIVE: " are written at the start of the abstract. These terms do not provided any meaningful information and are not found in every publication and, since in the end we try to measure the similarity between documents, they can artificially increase the similarity of two publications that are not related otherwise.
+Both the code and the documentation is located in the [medline-preprocessing repository](https://github.com/zbmed-semtec/medline-preprocessing) since it is a common step in every document-to-document similarity approach. We defined as "Structure words" those terms that are introduced in the text to better structure the abstract. In the table shown above, we can see that, for example, the words "BACKGROUND: " and "OBJECTIVE: " are written at the start of the abstract. These terms do not provided any meaningful information and are not found in every publication and, since in the end we try to measure the similarity between documents, they can artificially increase the similarity of two publications that are not related otherwise.
 
 These structure words usually follow a pattern: most of them are in capital letters (not always), they all end with a colon and an empty space ": " and they are always located at the beginning of a sentence. Using these rules, we developed an algorithm to identify and eliminate them.
 
 The main idea is:
 
-1. Loop throught every publication title and abstract and match a regular expression to find the structure words. At the same time, count in how many publications each structure word appears.
+1. Loop through every publication title and abstract and match a regular expression to find the structure words. At the same time, count in how many publications each structure word appears.
 
-2. Since we are applying a regular expression, some false positives might be found (certain acronyms for example). Since we don't want to remove relevant terms that may follow the regular expression, we apply a minimum frequency of appearance threshold. The standard is to require a matched structure word to appear in at least 0.01% of all publications. We create a [list of these structure words](https://github.com/zbmed-semtec/medline-preprocessing/blob/main/data/Structure_Words_removal/structure_word_list_pruned.txt). It possible to modify the minimum frequency of appearance by applying a different threshold. More information can be found in the corresponding documentation.
+2. Since we are applying a regular expression, some false positives might be found (certain acronyms for example). Since we don't want to remove relevant terms that may follow the regular expression, we apply a minimum frequency of appearance threshold. The standard is to require a matched structure word to appear in at least 0.01% of all publications. We create a [list of these structure words](https://github.com/zbmed-semtec/medline-preprocessing/blob/main/data/Structure_Words_removal/structure_word_list_pruned.txt). It is possible to modify the minimum frequency of appearance by applying a different threshold. More information can be found in the corresponding documentation.
 
 3. Remove every structure word found in the list.
 
@@ -140,7 +140,7 @@ To describe the development of evidence-based electronic prescribing (e-prescrib
 
 ### Text cleaning and tokenization
 
-The cleaning process is also described in the [medline-preprocessing repository](https://github.com/zbmed-semtec/medline-preprocessing) ([main documentation](https://github.com/zbmed-semtec/medline-preprocessing/blob/main/docs/Phrase_Preprocessing_Tutorial/tutorial_phrase_preprocessing.ipynb)). However, a specific preprocessing was develop for the hybrid approach ([specific documentation](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/tree/main/docs/preprocessing)) since it does not have the same requirements as other approaches.
+The cleaning process is also described in the [medline-preprocessing repository](https://github.com/zbmed-semtec/medline-preprocessing) ([main documentation](https://github.com/zbmed-semtec/medline-preprocessing/blob/main/docs/Phrase_Preprocessing_Tutorial/tutorial_phrase_preprocessing.ipynb)). However, a specific preprocessing was developed for the hybrid approach ([specific documentation](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/tree/main/docs/preprocessing)) since it does not have the same requirements as other approaches.
 
 The process consists in:
 
@@ -183,15 +183,15 @@ With the text cleaned, we can now start to generate the embeddings. To do so, we
 
 ## Hyperparameter search and model evaluation
 
-One of the most important steps in every machine learning development is to properly choose a set of hyperparameters. The Doc2vec hyperparamters we will consider for this research are the following:
+One of the most important steps in every machine learning development is to properly choose a set of hyperparameters. The Doc2vec hyperparameters we will consider for this research are the following:
 
 * The training algorithm **dm**. Refers to either using distributed memory or distributed bag of words.
-* The **vector_size** of the genrated embeddings. It represents the number of dimensions our embeddings will have.
+* The **vector_size** of the generated embeddings. It represents the number of dimensions our embeddings will have.
 * The **window** size represents the maximum distance between the current and predicted word.
 * The number of **epochs** or iterations of the training dataset.
-* The minimum nombre of appearances a word must have to not be ignored by the algorithm is specified with the **min_count** parameter.
+* The minimum number of appearances a word must have to not be ignored by the algorithm is specified with the **min_count** parameter.
 
-The most relevant aspect when trying to optimize for hyperparameters is to choose an appropiate evaluation method. In this research, two different approaches were considered:
+The most relevant aspect when trying to optimize for hyperparameters is to choose an appropriate evaluation method. In this research, two different approaches were considered:
 
 * ROC One vs All approach: if we understand our model as a non-relevant vs relevant classifier, we can use the area under the ROC curve (AUC) as a model quality estimator. More details can be found in the [corresponding documentation](https://github.com/zbmed-semtec/medline-preprocessing/tree/main/docs/Distribution_Analysis/hp_optimization).
 
