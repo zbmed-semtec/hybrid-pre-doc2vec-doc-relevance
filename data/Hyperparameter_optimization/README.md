@@ -74,6 +74,7 @@ hp_df
 
 
 <div>
+
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -544,6 +545,7 @@ hp_df
 
 
 <div>
+
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1073,6 +1075,7 @@ hp_df
 
 
 <div>
+
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1569,16 +1572,53 @@ ROC.draw_roc_curve(counting_table, draw_auc = True, output_path="data/Hyperparam
     
 
 
-<!-- 
-```python
-!jupyter nbconvert data/Hyperparameter_optimization/Hyperparameter_optimization.ipynb --to markdown --output README.md
-```
+# Final results:
 
-    [NbConvertApp] Converting notebook data/Hyperparameter_optimization/Hyperparameter_optimization.ipynb to markdown
-    [NbConvertApp] Support files will be in README_files/
-    [NbConvertApp] Making directory data/Hyperparameter_optimization/README_files
-    [NbConvertApp] Making directory data/Hyperparameter_optimization/README_files
-    [NbConvertApp] Making directory data/Hyperparameter_optimization/README_files
-    [NbConvertApp] Making directory data/Hyperparameter_optimization/README_files
-    [NbConvertApp] Writing 35934 bytes to data/Hyperparameter_optimization/README.md
--->
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Dataset</th>
+      <th>dm</th>
+      <th>epochs</th>
+      <th>min_count</th>
+      <th>vector_size</th>
+      <th>window</th>
+      <th>workers</th>
+      <th>AUC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>RELISH</th>
+      <td>1</td>
+      <td>15</td>
+      <td>5</td>
+      <td>256</td>
+      <td>5</td>
+      <td>8</td>
+      <th>0.5969</th>
+    </tr>
+    <tr>
+      <th>TREC simplified</th>
+      <td>0</td>
+      <td>15</td>
+      <td>0</td>
+      <td>256</td>
+      <td>5</td>
+      <td>16</td>
+      <th>0.6616</th>
+    </tr>
+    <tr>
+      <th>TREC repurposed</th>
+      <td>0</td>
+      <td>15</td>
+      <td>1</td>
+      <td>256</td>
+      <td>9</td>
+      <td>16</td>
+      <th>0.7828</th>
+    </tr>
+  </tbody>
+</table>
+</div>
