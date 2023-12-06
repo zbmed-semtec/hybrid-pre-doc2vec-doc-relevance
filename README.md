@@ -1,6 +1,27 @@
-# hybrid-dictionary-ner-doc2vec-doc-relevance
+# Hybrid-dictionary-ner-doc2vec-Doc-relevance
 
 In this repository, an approach exploring the combination of a dictionary-based NER using Whatizit and Doc2Vec framework, was developed to generate a document-to-document recommendation system. This approach will explore the transformation of annotated XML files after the Whatizit processing into a plain text dataset, the required preprocessing of the text and the Doc2Vec model generation, training and evaluation.
+
+## Table of Contents
+
+1. [About](#about)
+2. [Input Data](#input-data)
+3. [Pipeline](#pipeline)
+    1. [XML Translation](#xml-translation)
+    2. [Data Preprocessing](#data-preprocessing)
+        - [Structure words removal](#structure-words-removal)
+        - [Text cleaning and tokenization](#text-cleaning-and-tokenization)
+    3. [Generate Embeddings](#generate-embeddings)
+    4. [Calculate Cosine Similarity](#calculate-cosine-similarity)
+    5. [Hyperparameter Optimization](#)
+    6. [Evaluation](#evaluation)
+        - [Precision@N](#precisionn)
+        - [nDCG@N](#ndcgn)
+4. [Getting Started](#getting-started)
+5. [Tutorial](#tutorial)
+
+
+## About
 
 The main idea is to use a dictionary-based name entity recognition to group different medical terms into a single entity. To do so, we use the Whatizit text processing system developed by the Rebholz Research Group at [EMBL-EBI](https://www.ebi.ac.uk/). Once the terms are annotated, we replace these  
 annotations by their MeSH ID. For example, the dictionary will recognize every entry of the term "mechanism of action" all will add an XML tag around it. Our pipeline will then replace the whole tag by its MeSH ID, specifically for this term: [MeSHQ000494](http://purl.bioontology.org/ontology/MESH/Q000494).
@@ -9,7 +30,7 @@ Once we have the title and abstract of a publication with their medical terms su
 
 ## Input data
 
-On what is RELISH and TREC, please refer to our [medline-preprocessing repository](https://github.com/zbmed-semtec/medline-preprocessing), where the data explanation and extraction is described. 
+On what is RELISH, please refer to our [relish-preprocessing repository](https://github.com/zbmed-semtec/relish-preprocessing), where the data explanation and extraction is described. 
 
 For the hybrid approach, the input data are annotated XML files generated using Whatizit/monq. The process can be found in the [repository documentation](https://github.com/zbmed-semtec/whatizit-dictionary-ner/tree/main/docs).
 
@@ -48,7 +69,7 @@ This is an example of the annotated XML files we need:
 </collection>
 ```
 
-# Process
+## Pipeline
 
 Here, we describe the main process over both the RELISH and TREC datasets.
 
@@ -169,7 +190,9 @@ despite the high meshq000453 of meshd010300 the meshq000503 of its gastrointesti
 </tr>
 </table>
 
-## Doc2Vec model generation
+## Generate Embeddings
+
+### Doc2Vec model generation
 
 [Main documentation](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/tree/main/docs/embeddings)
 
@@ -183,7 +206,11 @@ With the text cleaned, we can now start to generate the embeddings. To do so, we
 
 4. Extract the embeddings of the training publications or generate them for new publications.
 
-## Hyperparameter search and model evaluation
+## Calculate Cosine Similarity
+
+To assess the similarity between two documents within the RELISH corpus, we employ the Cosine Similarity metric. This process enables the generation of a 4-column matrix containing cosine similarity scores for existing pairs of PMIDs within our corpus. For a more detailed explanation of the process, please refer to this documentation.
+
+## Hyperparameter Optimzation
 
 One of the most important steps in every machine learning development is to properly choose a set of hyperparameters. The Doc2vec hyperparameters we will consider for this research are the following:
 
@@ -197,8 +224,138 @@ The most relevant aspect when trying to optimize for hyperparameters is to choos
 
 * ROC One vs All approach: if we understand our model as a non-relevant vs relevant classifier, we can use the area under the ROC curve (AUC) as a model quality estimator. More details can be found in the [corresponding documentation](https://github.com/zbmed-semtec/medline-preprocessing/tree/main/docs/Distribution_Analysis/hp_optimization).
 
-* Precision and nDCG:  **Work In Progress**.
 
-# Results
+## Evaluation
 
-**Work In Progress**
+### Precision@N
+
+In order to evaluate the effectiveness of this approach, we make use of Precision@N. Precision@N measures the precision of retrieved documents at various cutoff points (N).We generate a Precision@N matrix for existing pairs of documents within the RELISH corpus, based on the original RELISH JSON file. The code determines the number of true positives within the top N pairs and computes Precision@N scores. The result is a Precision@N matrix with values at different cutoff points, including average scores. For detailed insights into the algorithm, please refer to this [documentation](https://github.com/zbmed-semtec/medline-preprocessing/tree/main/code/Precision%40N_existing_pairs).
+
+### nDCG@N
+
+Another metric used is the nDCG@N (normalized Discounted Cumulative Gain). This ranking metric assesses document retrieval quality by considering both relevance and document ranking. It operates by using a TSV file containing relevance and cosine similarity scores, involving the computation of DCG@N and iDCG@N scores. The result is an nDCG@N matrix for various cutoff values (N) and each PMID in the corpus, with detailed information available in the [documentation](https://github.com/zbmed-semtec/medline-preprocessing/tree/main/code/Evaluation).
+
+
+## Getting Started
+
+To get started with this project, follow these steps:
+
+### Step 1: Clone the Repository
+First, clone the repository to your local machine using the following command:
+
+###### Using HTTP:
+
+```
+git clone https://github.com/zbmed-semtec/hybrid-doc2vec-doc-relevance.git
+```
+
+###### Using SSH:
+Ensure you have set up SSH keys in your GitHub account.
+
+```
+git clone git@github.com:zbmed-semtec/hybrid-doc2vec-doc-relevance.git
+```
+
+### Step 2: Create a virtual environment and install dependencies
+
+To create a virtual environment within your repository, run the following command:
+
+```
+python3 -m venv .venv 
+source .venv/bin/activate   # On Windows, use '.venv\Scripts\activate' 
+```
+
+To confirm if the virtual environment is activated and check the location of yourPython interpreter, run the following command:
+
+```
+which python    # On Windows command prompt, use 'where python'
+                # On Windows PowerShell, use 'Get-Command python'
+```
+The code is stable with python 3.6 and higher. The required python packages are listed in the requirements.txt file. To install the required packages, run the following command:
+
+```
+pip install -r requirements.txt
+```
+
+To deactivate the virtual environment after running the project, run the following command:
+
+```
+deactivate
+```
+
+### Step 3: Translate XMLs
+
+Code implementation for this step can be found [here](https://github.com/zbmed-semtec/hybrid-doc2vec-doc-relevance/tree/main/docs/xml_translate). 
+
+### Step 4: Data Preprocessing
+
+Code implementation for structure word removal can be found [here](https://github.com/zbmed-semtec/medline-preprocessing/tree/main/docs/Structure_Words_removal) and for text pre-processing can be found [here](https://github.com/zbmed-semtec/hybrid-doc2vec-doc-relevance/tree/main/docs/preprocessing).
+
+### Step 3: Generate Embeddings
+
+Code implementation for generating embeddings using the Doc2vec models can be found [here](https://github.com/zbmed-semtec/hybrid-doc2vec-doc-relevance/tree/main/docs/embeddings).
+
+### Step 4: Calculate Cosine Similarity
+In order to generate the cosine similarity matrix and execute this [script](./code/cosine_similarity/generate_cosine_existing_pairs.py), run the following command:
+
+```
+python3 code/generate_cosine_existing_pairs.py [-i INPUT PATH] [-e EMBEDDINGS] [-o OUTPUT PATH] [-c DOC EMBEDDINGS COUNT]
+```
+
+You must pass the following four arguments:
+
++ -i/ --input : File path to the RELISH relevance matrix in the TSV format.
++ -e/ --embeddings : File path to the embeddings in the pickle file format.
++ -o/ --output : File path for the output 4 column cosine similarity matrix.
++ -c/ --doc_embeddings_count : Number of document embeddings generated to be evaluated on the cosine similarity matrix.
+
+For example, if you are running the code from the code folder and have the RELISH relevance matrix in the data folder, run the cosine matrix creation for all hyperparameters as:
+
+```
+python3 code/cosine_similarity/generate_cosine_existing_pairs.py -i data/relevance_w2v_blank.tsv -e data/ -o data/w2v_relevance -c 18
+```
+
+### Step 5: Precision@N
+In order to calculate the Precision@N scores and execute this [script](/code/evaluation/precision.py), run the following command:
+
+```
+python3 code/evaluation/precision.py [-c COSINE FILE PATH]  [-o OUTPUT PATH]
+```
+
+You must pass the following two arguments:
+
++ -c/ --cosine_file_path: path to the 4-column cosine similarity existing pairs RELISH file: (tsv file)
++ -o/ --output_path: path to save the generated precision matrix: (tsv file)
+
+For example, if you are running the code from the code folder and have the cosine similarity TSV file in the data folder, run the precision matrix creation for the first hyperparameter as:
+
+```
+python3 code/evaluation/precision.py -c data/w2v_relevance_0.tsv -o data/w2v_precision_0.tsv
+```
+
+
+### Step 6: nDCG@N
+In order to calculate nDCG scores and execute this [script](/code/evaluation/calculate_gain.py), run the following command:
+
+```
+python3 code/evaluation/calculate_gain.py [-i INPUT]  [-o OUTPUT]
+```
+
+You must pass the following two arguments:
+
++ -i / --input: Path to the 4 column cosine similarity existing pairs RELISH TSV file.
++ -o/ --output: Output path along with the name of the file to save the generated nDCG@N TSV file.
+
+For example, if you are running the code from the code folder and have the 4 column RELISH TSV file in the data folder, run the matrix creation for the first hyperparameter as:
+
+```
+python3 code/evaluation/calculate_gain.py -i data/w2v_relevance_0.tsv -o data/w2v_ndcg_0.tsv
+```
+
+## Tutorials
+
+Tutorials are accessible in the form of Jupyter notebooks for the following processes:
+
++ [Translating Annotated XMLs](https://github.com/zbmed-semtec/hybrid-doc2vec-doc-relevance-training/tree/main/docs/xml_translate)
++ [Data Preprocessing](https://github.com/zbmed-semtec/hybrid-doc2vec-doc-relevance-training/tree/main/docs/preprocessing) 
++ [Generating Embeddings](https://github.com/zbmed-semtec/hybrid-doc2vec-doc-relevance-training/tree/main/docs/embeddings)
