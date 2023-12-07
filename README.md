@@ -351,7 +351,7 @@ For example, if you are running the code from the code folder and have the 4 col
 ```
 python3 code/evaluation/calculate_gain.py -i data/w2v_relevance_0.tsv -o data/w2v_ndcg_0.tsv
 ```
-#### Step 7: Compile Results
+### Step 7: Compile Results
 
 In order to compile the average result values for Precison@ and nDCG@N and generate a single TSV file each, please use this [script](code/evaluation/show_avg.py).
 
