@@ -291,15 +291,27 @@ Code implementation for this step can be found [here](https://github.com/zbmed-s
 
 Code implementation for structure word removal can be found [here](https://github.com/zbmed-semtec/medline-preprocessing/tree/main/docs/Structure_Words_removal) and for text pre-processing can be found [here](https://github.com/zbmed-semtec/hybrid-doc2vec-doc-relevance/tree/main/docs/preprocessing).
 
-### Step 3: Generate Embeddings
+### Step 5: Generate Embeddings
 
 Code implementation for generating embeddings using the Doc2vec models can be found [here](https://github.com/zbmed-semtec/hybrid-doc2vec-doc-relevance/tree/main/docs/embeddings).
 
-### Step 4: Calculate Cosine Similarity
-In order to generate the cosine similarity matrix and execute this [script](./code/cosine_similarity/generate_cosine_existing_pairs.py), run the following command:
+
+The `run_embeddings.py` script uses the RELISH Annotated and Preprocessed Tokenized npy file as input and includes a default parameter dictionary with preset hyperparameters. You can easily adapt it for different values and parameters by modifying the params_dict. Make sure to have the RELISH Tokenized.npy file within the directory under the data folder.
+
+To run this script, please execute the following command:
 
 ```
-python3 code/generate_cosine_existing_pairs.py [-i INPUT PATH] [-e EMBEDDINGS] [-o OUTPUT PATH] [-c DOC EMBEDDINGS COUNT]
+python3 code/embeddings/run_embeddings.py --input "data/RELISH_tokenized.npy"
+```
+
+The script will create Doc2Vec models, generate embeddings, and store them in separate directories. You should expect to find a total of 18 files corresponding to the various models, embeddings, and embedding pickle files.
+
+
+### Step 6: Calculate Cosine Similarity
+In order to generate the cosine similarity matrix and execute this [script](/code/evaluation/generate_cosine_existing_pairs.py), run the following command:
+
+```
+python3 code/evaluation/generate_cosine_existing_pairs.py [-i INPUT PATH] [-e EMBEDDINGS] [-o OUTPUT PATH] [-c DOC EMBEDDINGS COUNT]
 ```
 
 You must pass the following four arguments:
@@ -312,10 +324,10 @@ You must pass the following four arguments:
 For example, if you are running the code from the code folder and have the RELISH relevance matrix in the data folder, run the cosine matrix creation for all hyperparameters as:
 
 ```
-python3 code/cosine_similarity/generate_cosine_existing_pairs.py -i data/relevance_w2v_blank.tsv -e data/ -o data/w2v_relevance -c 18
+python3 code/evaluation/generate_cosine_existing_pairs.py -i data/relevance_w2v_blank.tsv -e data/ -o data/w2v_relevance -c 18
 ```
 
-### Step 5: Precision@N
+### Step 7: Precision@N
 In order to calculate the Precision@N scores and execute this [script](/code/evaluation/precision.py), run the following command:
 
 ```
@@ -334,24 +346,25 @@ python3 code/evaluation/precision.py -c data/w2v_relevance_0.tsv -o data/w2v_pre
 ```
 
 
-### Step 6: nDCG@N
+### Step 8: nDCG@N
 In order to calculate nDCG scores and execute this [script](/code/evaluation/calculate_gain.py), run the following command:
 
 ```
-python3 code/evaluation/calculate_gain.py [-i INPUT]  [-o OUTPUT]
+python3 code/evaluation/calculate_gain.py [-i INPUT]  [-o OUTPUT] [-n NUMBER]
 ```
 
 You must pass the following two arguments:
 
 + -i / --input: Path to the 4 column cosine similarity existing pairs RELISH TSV file.
 + -o/ --output: Output path along with the name of the file to save the generated nDCG@N TSV file.
++ -n/ --number: Number for the hyperparameter combination.
 
 For example, if you are running the code from the code folder and have the 4 column RELISH TSV file in the data folder, run the matrix creation for the first hyperparameter as:
 
 ```
-python3 code/evaluation/calculate_gain.py -i data/w2v_relevance_0.tsv -o data/w2v_ndcg_0.tsv
+python3 code/evaluation/calculate_gain.py -i data/w2v_relevance_0.tsv -o data/w2v_ndcg_0.tsv -n 18
 ```
-### Step 7: Compile Results
+### Step 9: Compile Results
 
 In order to compile the average result values for Precison@ and nDCG@N and generate a single TSV file each, please use this [script](code/evaluation/show_avg.py).
 
