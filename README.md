@@ -311,7 +311,7 @@ The script will create Doc2Vec models, generate embeddings, and store them in se
 In order to generate the cosine similarity matrix and execute this [script](/code/evaluation/generate_cosine_existing_pairs.py), run the following command:
 
 ```
-python3 code/evaluation/generate_cosine_existing_pairs.py [-i INPUT PATH] [-e EMBEDDINGS] [-o OUTPUT PATH] [-c DOC EMBEDDINGS COUNT]
+python3 code/evaluation/generate_cosine_existing_pairs.py [-i INPUT PATH] [-e EMBEDDINGS] [-o OUTPUT PATH]
 ```
 
 You must pass the following four arguments:
@@ -319,13 +319,15 @@ You must pass the following four arguments:
 + -i/ --input : File path to the RELISH relevance matrix in the TSV format.
 + -e/ --embeddings : File path to the embeddings in the pickle file format.
 + -o/ --output : File path for the output 4 column cosine similarity matrix.
-+ -c/ --doc_embeddings_count : Number of document embeddings generated to be evaluated on the cosine similarity matrix.
+
 
 For example, if you are running the code from the code folder and have the RELISH relevance matrix in the data folder, run the cosine matrix creation for all hyperparameters as:
 
 ```
-python3 code/evaluation/generate_cosine_existing_pairs.py -i data/relevance_w2v_blank.tsv -e data/ -o data/w2v_relevance -c 18
+python3 code/evaluation/generate_cosine_existing_pairs.py -i data/Relevance_matrix/relevance_w2v_blank.tsv -e dataframe/embeddings_pickle_0.tsv -o data/cosine_similarity_0.tsv
 ```
+
+Note: You would have to run the above command for every hyperparameter configuration.
 
 ### Step 7: Precision@N
 In order to calculate the Precision@N scores and execute this [script](/code/evaluation/precision.py), run the following command:
@@ -342,8 +344,9 @@ You must pass the following two arguments:
 For example, if you are running the code from the code folder and have the cosine similarity TSV file in the data folder, run the precision matrix creation for the first hyperparameter as:
 
 ```
-python3 code/evaluation/precision.py -c data/w2v_relevance_0.tsv -o data/w2v_precision_0.tsv
+python3 code/evaluation/precision.py -c data/cosine_similarity_0.tsv -o data/hybrid_precision_0.tsv
 ```
+
 
 
 ### Step 8: nDCG@N
@@ -362,8 +365,9 @@ You must pass the following two arguments:
 For example, if you are running the code from the code folder and have the 4 column RELISH TSV file in the data folder, run the matrix creation for the first hyperparameter as:
 
 ```
-python3 code/evaluation/calculate_gain.py -i data/w2v_relevance_0.tsv -o data/w2v_ndcg_0.tsv -n 18
+python3 code/evaluation/calculate_gain.py -i data/cosine_similarity_0.tsv -o data/hybrid_gain_0.tsv -n 0
 ```
+
 ### Step 9: Compile Results
 
 In order to compile the average result values for Precison@ and nDCG@N and generate a single TSV file each, please use this [script](code/evaluation/show_avg.py).

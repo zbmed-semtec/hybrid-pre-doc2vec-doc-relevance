@@ -5,7 +5,7 @@ import logging
 import embeddings as em
 import embeddings_dataframe as ed
 
-log_file = "hybrid/doc2vec.log"
+log_file = "hybrid_doc2vec.log"
 logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s - %(levelname)s: %(message)s')
 
 def run(params_dict: dict, input_file: str):
@@ -50,7 +50,7 @@ def run(params_dict: dict, input_file: str):
         # Ensure the directory exists or create it
         if not os.path.exists(embeddings_directory):
             os.makedirs(embeddings_directory)
-            
+                
         # Generate the embeddings
         em.create_document_embeddings(pmids, model, embeddings_directory)
         logging.info("RELISH Embeddings Generated")

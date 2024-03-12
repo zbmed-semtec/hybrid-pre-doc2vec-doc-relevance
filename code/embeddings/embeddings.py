@@ -1,4 +1,6 @@
+import sys
 import numpy as np
+import logging
 import pandas as pd
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 
@@ -7,50 +9,45 @@ from typing import Union, List
 # Retrieves cleaned data from RELISH and TREC npy files
 
 
-def process_data_from_npy(file_path_in: str = None) -> Union[List[str], List[List[str]], List[List[str]], List[List[str]]]:
-    """
-    Retrieves cleaned data from RELISH and TREC npy files, separating each column 
-    into their own respective list.
+def process_data_from_npy(filepathIn: str = None):
+        """
+        Retrieves data from RELISH npy files, separating each column into their own respective list.
 
-    Parameters
-    ----------
-    filepathIn: str
-            The filepath of the RELISH or TREC input npy file.
-    Returns
-    -------
-    pmids: List[str]
-            A list of all pubmed ids in the corpus.
-    titles: List[List[str]]
-            A list of lists where each sub-list contains the words 
-            in the cleaned/processed title.
-    abstracts: List[List[str]]
-            A list of lists where each sub-list contains the words 
-            in the cleaned/processed abstract.
-    docs: List[List[str]]
-            A list of lists where each sub-list contains the words 
-            in the cleaned/processed document (title + abstract).
-    """
-    doc = np.load(file_path_in, allow_pickle=True)
+        Parameters
+        ----------
+        filepathIn: str
+                The filepath of the RELISH or TREC input npy file.
 
-    pmids = []
-    titles = []
-    abstracts = []
-    docs = []
-
-    for line in doc:
-        if isinstance(line[0], (np.ndarray, np.generic)):
-            pmids.append(np.ndarray.tolist(line[0]))
-            titles.append(np.ndarray.tolist(line[1]))
-            abstracts.append(np.ndarray.tolist(line[2]))
-            docs.append(np.ndarray.tolist(
-                line[1]) + np.ndarray.tolist(line[2]))
+        Returns
+        -------
+        list of str
+                All pubmed ids associated to the paper.
+        list of str
+                All words within the title.
+        list of str
+                All words within the abstract.
+        """
+        if not isinstance(filepathIn, str):
+                logging.alert("Wrong parameter type for prepareFromTSV.")
+                sys.exit("filepathIn needs to be of type string")
         else:
-            pmids.append(line[0])
-            titles.append(line[1])
-            abstracts.append(line[2])
-            docs.append(line[1] + line[2])
-
-    return (pmids, titles, abstracts, docs)
+                doc = np.load(filepathIn, allow_pickle=True)
+                pmids = []
+                titles = []
+                abstracts = []
+                docs = []
+                for line in doc:
+                    pmids.append(int(line[0]))
+                    if isinstance(line[1], (np.ndarray, np.generic)):
+                        titles.append(np.ndarray.tolist(line[1]))
+                        abstracts.append(np.ndarray.tolist(line[2]))
+                        docs.append(np.ndarray.tolist(
+                            line[1]) + np.ndarray.tolist(line[2]))
+                    else:
+                        titles.append(line[1])
+                        abstracts.append(line[2])
+                        docs.append(line[1] + line[2])
+                return (pmids, titles, abstracts, docs)
 
 # Create and train the Doc2Vec Model
 

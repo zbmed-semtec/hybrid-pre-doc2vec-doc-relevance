@@ -61,7 +61,7 @@ def get_identity_dcg_matrix(similarity_matrix: pd.DataFrame, output_file: str):
     """
     # idcg_matrix = similarity_matrix.sort_values(['PMID Reference', 'Relevance Assessment'],
     #                                             ascending=[True, False], ignore_index=True)
-    idcg_matrix = similarity_matrix.sort_values(['PMID1', 'relevance'],
+    idcg_matrix = similarity_matrix.sort_values(['PMID1', 'Relevance'],
                                                 ascending=[True, False], ignore_index=True)                                                
     idcg_matrix.index = idcg_matrix.index + 1
     # idcg_matrix.to_csv("./data/doc2vec-doc/idcg_doc2vec-doc.tsv", sep='\t')
@@ -85,7 +85,7 @@ def calculate_dcg_at_n(n: int, all_assessed_pmids: pd.DataFrame) -> float:
     dcg_n = 0
     for i, (index, row) in enumerate(all_assessed_pmids[:n].iterrows(), start=1):
         # rel = row['Relevance Assessment']
-        rel = row['relevance']
+        rel = row['Relevance']
         value = (2**rel - 1) / math.log2(i + 1)
         dcg_n += value
     return round(dcg_n, 4)
@@ -109,7 +109,7 @@ def calculate_idcg_at_n(n: int, sorted_assessed_pmids: pd.DataFrame) -> float:
     idcg_n = 0
     for i, (index, row) in enumerate(sorted_assessed_pmids[:n].iterrows(), start=1):
         # rel = row['Relevance Assessment']
-        rel = row['relevance']
+        rel = row['Relevance']
         value = (2**rel - 1) / math.log2(i + 1)
         idcg_n += value
     return round(idcg_n, 4)
