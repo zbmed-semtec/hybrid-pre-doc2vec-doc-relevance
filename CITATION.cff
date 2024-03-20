@@ -15,7 +15,7 @@ authors:
   - family-names: "Rebholz-Schuhmann"
     given-names: "Dietrich"
     orcid: "https://orcid.org/0000-0002-1018-0370"
-title: "doc2vec-doc-relevance"
+title: "hybrid-pre-doc2vec-doc-relevance"
 version: 1.0.0
 date-released: 2022-04-19
 license: GPL-3.0-or-later
