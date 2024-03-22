@@ -9,12 +9,14 @@ authors:
     orchid: "https://orchid.org/0000-0002-4795-3648"
   - family-names: "Talha"
     given-names: "Muhammad"
-  - family-names: "Castro"
-    given-names: "Leyla Jael"
-    orcid: "https://orcid.org/0000-0003-3986-0510"
+  - family-names: "Venkatesh"
+    given-names: "Suhasini"
   - family-names: "Rebholz-Schuhmann"
     given-names: "Dietrich"
     orcid: "https://orcid.org/0000-0002-1018-0370"
+  - family-names: "Castro"
+    given-names: "Leyla Jael"
+    orcid: "https://orcid.org/0000-0003-3986-0510"
 title: "hybrid-pre-doc2vec-doc-relevance"
 version: 1.0.0
 date-released: 2022-04-19
