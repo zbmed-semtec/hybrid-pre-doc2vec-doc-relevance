@@ -71,7 +71,7 @@ This is an example of the annotated XML files we need:
 
 ## Pipeline
 
-Here, we describe the main process over both the RELISH and TREC datasets.
+Here, we describe the main process over the RELISH dataset.
 
 ## XML translation
 
@@ -130,7 +130,7 @@ The next step is to apply some preprocessing to the publications. This process i
 
 [Main documentation](https://github.com/zbmed-semtec/medline-preprocessing/tree/main/docs/Structure_Words_removal).
 
-Both the code and the documentation is located in the [medline-preprocessing repository](https://github.com/zbmed-semtec/medline-preprocessing) since it is a common step in every document-to-document similarity approach. We defined as "Structure words" those terms that are introduced in the text to better structure the abstract. In the table shown above, we can see that, for example, the words "BACKGROUND: " and "OBJECTIVE: " are written at the start of the abstract. These terms do not provided any meaningful information and are not found in every publication and, since in the end we try to measure the similarity between documents, they can artificially increase the similarity of two publications that are not related otherwise.
+Both the code and the documentation is located in the [relish-preprocessing repository](https://github.com/zbmed-semtec/relish-preprocessing) since it is a common step in every document-to-document similarity approach. We defined as "Structure words" those terms that are introduced in the text to better structure the abstract. In the table shown above, we can see that, for example, the words "BACKGROUND: " and "OBJECTIVE: " are written at the start of the abstract. These terms do not provided any meaningful information and are not found in every publication and, since in the end we try to measure the similarity between documents, they can artificially increase the similarity of two publications that are not related otherwise.
 
 These structure words usually follow a pattern: most of them are in capital letters (not always), they all end with a colon and an empty space ": " and they are always located at the beginning of a sentence. Using these rules, we developed an algorithm to identify and eliminate them.
 
@@ -138,7 +138,7 @@ The main idea is:
 
 1. Loop through every publication abstract and match a regular expression to find the structure words. At the same time, count in how many publications each structure word appears.
 
-2. Since we are applying a regular expression, some false positives might be found (certain acronyms for example). Since we don't want to remove relevant terms that may follow the regular expression, we apply a minimum frequency of appearance threshold. The standard is to require a matched structure word to appear in at least 0.01% of all publications. We create a [list of these structure words](https://github.com/zbmed-semtec/medline-preprocessing/blob/main/data/Structure_Words_removal/structure_word_list_pruned.txt). It is possible to modify the minimum frequency of appearance by applying a different threshold. More information can be found in the corresponding documentation.
+2. Since we are applying a regular expression, some false positives might be found (certain acronyms for example). Since we don't want to remove relevant terms that may follow the regular expression, we apply a minimum frequency of appearance threshold. The standard is to require a matched structure word to appear in at least 0.01% of all publications. We create a [list of these structure words](https://github.com/zbmed-semtec/relish-preprocessing/blob/main/data/output/structure-words/structure_word_list_pruned.txt). It is possible to modify the minimum frequency of appearance by applying a different threshold. More information can be found in the corresponding documentation.
 
 3. Remove every structure word found in the list.
 
@@ -161,9 +161,9 @@ To describe the development of evidence-based electronic prescribing (e-prescrib
 
 ### Text cleaning and tokenization
 
-[Main documentation](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/tree/main/docs/preprocessing)
+[Main documentation](https://github.com/zbmed-semtec/hybrid-pre-doc2vec-doc-relevance/tree/main/docs/preprocessing)
 
-The cleaning process is also described in the [medline-preprocessing repository](https://github.com/zbmed-semtec/medline-preprocessing) ([main documentation](https://github.com/zbmed-semtec/medline-preprocessing/blob/main/docs/Phrase_Preprocessing_Tutorial/tutorial_phrase_preprocessing.ipynb)). However, a specific preprocessing was developed for the hybrid approach ([specific documentation](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/tree/main/docs/preprocessing)) since it does not have the same requirements as other approaches.
+The cleaning process is also described in the [relish-preprocessing repository](https://github.com/zbmed-semtec/relish-preprocessing) ([main documentation](https://github.com/zbmed-semtec/hybrid-pre-doc2vec-doc-relevance/blob/main/docs/preprocessing/tutorial_preprocessing.ipynb)). However, a specific preprocessing was developed for the hybrid approach ([specific documentation](https://github.com/zbmed-semtec/hybrid-pre-doc2vec-doc-relevance/tree/main/docs/preprocessing)) since it does not have the same requirements as other approaches.
 
 The process consists in:
 
@@ -194,7 +194,7 @@ despite the high meshq000453 of meshd010300 the meshq000503 of its gastrointesti
 
 ### Doc2Vec model generation
 
-[Main documentation](https://github.com/zbmed-semtec/hybrid-dictionary-ner-doc2vec-doc-relevance/tree/main/docs/embeddings)
+[Main documentation](/docs/embeddings)
 
 With the text cleaned, we can now start to generate the embeddings. To do so, we will use the [Doc2Vec](https://radimrehurek.com/gensim/models/doc2vec.html) framework provided by [Gensim](https://radimrehurek.com/gensim/). The process can be described as follows:
 
@@ -210,7 +210,7 @@ With the text cleaned, we can now start to generate the embeddings. To do so, we
 
 To assess the similarity between two documents within the RELISH corpus, we employ the Cosine Similarity metric. This process enables the generation of a 4-column matrix containing cosine similarity scores for existing pairs of PMIDs within our corpus. For a more detailed explanation of the process, please refer to this documentation.
 
-## Hyperparameter Optimzation
+## Hyperparameters
 
 One of the most important steps in every machine learning development is to properly choose a set of hyperparameters. The Doc2vec hyperparameters we will consider for this research are the following:
 
@@ -285,15 +285,15 @@ deactivate
 
 ### Step 3: Translate XMLs
 
-Code implementation for this step can be found [here](https://github.com/zbmed-semtec/hybrid-doc2vec-doc-relevance/tree/main/docs/xml_translate). 
+Code implementation for this step can be found [here](https://github.com/zbmed-semtec/hybrid-pre-doc2vec-doc-relevance/tree/main/docs/xml_translate). 
 
 ### Step 4: Data Preprocessing
 
-Code implementation for structure word removal can be found [here](https://github.com/zbmed-semtec/medline-preprocessing/tree/main/docs/Structure_Words_removal) and for text pre-processing can be found [here](https://github.com/zbmed-semtec/hybrid-doc2vec-doc-relevance/tree/main/docs/preprocessing).
+Code implementation for structure word removal can be found [here](https://github.com/zbmed-semtec/relish-preprocessing/tree/main/docs/structure_words_removal) and for text pre-processing can be found [here](https://github.com/zbmed-semtec/hybrid-pre-doc2vec-doc-relevance/tree/main/docs/preprocessing).
 
 ### Step 5: Generate Embeddings
 
-Code implementation for generating embeddings using the Doc2vec models can be found [here](https://github.com/zbmed-semtec/hybrid-doc2vec-doc-relevance/tree/main/docs/embeddings).
+Code implementation for generating embeddings using the Doc2vec models can be found [here](https://github.com/zbmed-semtec/hybrid-pre-doc2vec-doc-relevance/tree/main/docs/embeddings).
 
 
 The `run_embeddings.py` script uses the RELISH Annotated and Preprocessed Tokenized npy file as input and includes a default parameter dictionary with preset hyperparameters. You can easily adapt it for different values and parameters by modifying the params_dict. Make sure to have the RELISH Tokenized.npy file within the directory under the data folder.
