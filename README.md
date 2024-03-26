@@ -327,7 +327,13 @@ For example, if you are running the code from the code folder and have the RELIS
 python3 code/evaluation/generate_cosine_existing_pairs.py -i data/Relevance_matrix/relevance_w2v_blank.tsv -e dataframe/embeddings_pickle_0.tsv -o data/cosine_similarity_0.tsv
 ```
 
-Note: You would have to run the above command for every hyperparameter configuration.
+Note: You would have to run the above command for every hyperparameter configuration by changing the file name for the embedding's pickle file or use the following shell script to generate all files at once.
+
+```
+> for VALUE in {0..17};do
+> python3 code/evaluation/generate_cosine_existing_pairs.py -i data/Relevance_matrix/relevance_w2v_blank.tsv -e dataframe/embeddings_pickle_${VALUE}.tsv -o data/cosine_similarity_${VALUE}.tsv
+> done
+```
 
 ### Step 7: Precision@N
 In order to calculate the Precision@N scores and execute this [script](/code/evaluation/precision.py), run the following command:
@@ -347,7 +353,22 @@ For example, if you are running the code from the code folder and have the cosin
 python3 code/evaluation/precision.py -c data/cosine_similarity_0.tsv -o data/hybrid_precision_0.tsv
 ```
 
+Note: You would have to run the above command for every hyperparameter configuration by changing the file name for the cosine similarity file or use the following shell script to generate all files at once.
 
+```
+> for VALUE in {0..17};do
+> python3 code/evaluation/precision.py -c data/cosine_similarity_{VALUE}.tsv -o data/hybrid_precision_${VALUE}.tsv
+> done
+```
+
+### Class Distributions
+
+Kindly rerun Precision@N twice, considering both class distributions.
+
++ To compute Precision@ for three classes, utilize line 63 in the [script](./code/evaluation/precision.py) and comment out line 64.
+
++ For Precision@ of two classes, use line 64 of the [script](./code/evaluation/precision.py) and comment out line 63.
+Ensure the correct file names are used for all precision files corresponding to both class distributions.
 
 ### Step 8: nDCG@N
 In order to calculate nDCG scores and execute this [script](/code/evaluation/calculate_gain.py), run the following command:
@@ -368,6 +389,14 @@ For example, if you are running the code from the code folder and have the 4 col
 python3 code/evaluation/calculate_gain.py -i data/cosine_similarity_0.tsv -o data/hybrid_gain_0.tsv -n 0
 ```
 
+Note: You would have to run the above command for every hyperparameter configuration by changing the file name for the cosine similarity file or use the following shell script to generate all files at once.
+
+```
+> for VALUE in {0..17};do
+> python3 code/evaluation/calculate_gain.py -i data/cosine_similarity_{VALUE}.tsv -o data/hybrid_gain_${VALUE}.tsv
+> done
+```
+
 ### Step 9: Compile Results
 
 In order to compile the average result values for Precison@ and nDCG@N and generate a single TSV file each, please use this [script](code/evaluation/show_avg.py).
@@ -377,6 +406,7 @@ You must pass the following two arguments:
 + -i / --input: Path to the directory consisting of all the precision matrices/gain matrices.
 + -o/ --output: Output path along with the name of the file to save the generated compiled Precision@N / nDCG@N TSV file.
 
+Make sure to move all precision (class distribution wise) and gain files to separate folders before executing this script.
 
 If you are running the code from the code folder, run the compilation script as:
 
@@ -384,7 +414,7 @@ If you are running the code from the code folder, run the compilation script as:
 python3 code/evaluation/show_avg.py -i data/output/gain_matrices/ -o data/output/results_gain.tsv
 ```
 
-NOTE: Please do not forget to put a `'/'` at the end of the input file path.
+NOTE: Please do not forget to put a `'/'` at the end of the input file path. Execute the above script for both gain and precision results.
 
 ## Tutorials
 
