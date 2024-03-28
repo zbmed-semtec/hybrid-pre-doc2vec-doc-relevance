@@ -271,7 +271,7 @@ To confirm if the virtual environment is activated and check the location of you
 which python    # On Windows command prompt, use 'where python'
                 # On Windows PowerShell, use 'Get-Command python'
 ```
-The code is stable with python 3.6 and higher. The required python packages are listed in the requirements.txt file. To install the required packages, run the following command:
+The code is stable with python 3.9 and higher. The required python packages are listed in the requirements.txt file. To install the required packages, run the following command:
 
 ```
 pip install -r requirements.txt
@@ -324,14 +324,14 @@ You must pass the following four arguments:
 For example, if you are running the code from the code folder and have the RELISH relevance matrix in the data folder, run the cosine matrix creation for all hyperparameters as:
 
 ```
-python3 code/evaluation/generate_cosine_existing_pairs.py -i data/Relevance_matrix/relevance_w2v_blank.tsv -e dataframe/embeddings_pickle_0.tsv -o data/cosine_similarity_0.tsv
+python3 code/evaluation/generate_cosine_existing_pairs.py -i data/Relevance_matrix/relevance_w2v_blank.tsv -e dataframe/embeddings_pickle_0.pkl -o data/cosine_similarity_0.tsv
 ```
 
 Note: You would have to run the above command for every hyperparameter configuration by changing the file name for the embedding's pickle file or use the following shell script to generate all files at once.
 
 ```
 > for VALUE in {0..17};do
-> python3 code/evaluation/generate_cosine_existing_pairs.py -i data/Relevance_matrix/relevance_w2v_blank.tsv -e dataframe/embeddings_pickle_${VALUE}.tsv -o data/cosine_similarity_${VALUE}.tsv
+> python3 code/evaluation/generate_cosine_existing_pairs.py -i data/Relevance_matrix/relevance_w2v_blank.tsv -e dataframe/embeddings_pickle_${VALUE}.pkl -o data/cosine_similarity_${VALUE}.tsv
 > done
 ```
 
