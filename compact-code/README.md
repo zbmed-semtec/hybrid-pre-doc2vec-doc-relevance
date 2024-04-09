@@ -52,7 +52,7 @@ deactivate
 ```
 
 ### Step 3: Dataset
-- Download the dataset from this link: [RELISH Annotated_Dataset]([https://drive.google.com/drive/folders/1Bq_U5207utn7tvSt_HLVdOdYR5QW7MMN](https://drive.google.com/drive/folders/1vsC6VrubXVIAEo5pxR0MvY7hDIDZ1tfc)).
+- Download the dataset from this link: [RELISH Annotated_Dataset](https://drive.google.com/drive/folders/1Bq_U5207utn7tvSt_HLVdOdYR5QW7MMN](https://drive.google.com/drive/folders/1vsC6VrubXVIAEo5pxR0MvY7hDIDZ1tfc).
 
 ### Step 4: Create Model Pipeline
 
