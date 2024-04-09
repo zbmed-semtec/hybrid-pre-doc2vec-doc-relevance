@@ -56,11 +56,11 @@ deactivate
 
 ### Step 4: Create Model Pipeline
 
-This pipeline aims to create Doc-2Vec models using given hyperparameter sets, train the models, and evaluate their performance using three-class precision, two-class precision and nDCG score.
+This pipeline aims to create Doc2Vec models using given hyperparameter sets, train the models, and evaluate their performance using three-class precision, two-class precision and nDCG scores.
 
 #### Pipeline Steps:
 
-- **Model Training**: Trains Doc-2Vec model with the given hyperparameters using the annotated input data.
+- **Model Training**: Trains Doc2Vec model with the given hyperparameters using the annotated input data.
 - **Storing Generation**: Stores the generated embeddings for the the annotated input data.
 - **Cosine Similarity Computation**: Calculates cosine similarities for the generated embeddings.
 - **Precision@N Calculation**: Computes Precision@N scores, a measure of the relevance of retrieved documents, for the obtained cosine similarities.
