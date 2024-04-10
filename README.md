@@ -301,7 +301,7 @@ The `run_embeddings.py` script uses the RELISH Annotated and Preprocessed Tokeni
 To run this script, please execute the following command:
 
 ```
-python3 code/embeddings/run_embeddings.py --input "data/RELISH_tokenized.npy"
+python3 code/embeddings/run_embeddings.py --input "data/RELISH_Annotated_tokenized.npy"
 ```
 
 The script will create Doc2Vec models, generate embeddings, and store them in separate directories. You should expect to find a total of 18 files corresponding to the various models, embeddings, and embedding pickle files.
