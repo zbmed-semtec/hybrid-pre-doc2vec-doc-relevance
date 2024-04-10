@@ -357,7 +357,7 @@ Note: You would have to run the above command for every hyperparameter configura
 
 ```
 > for VALUE in {0..17};do
-> python3 code/evaluation/precision.py -c data/cosine_similarity_{VALUE}.tsv -o data/hybrid_precision_${VALUE}.tsv
+> python3 code/evaluation/precision.py -c data/cosine_similarity_${VALUE}.tsv -o data/hybrid_precision_${VALUE}.tsv
 > done
 ```
 
@@ -393,7 +393,7 @@ Note: You would have to run the above command for every hyperparameter configura
 
 ```
 > for VALUE in {0..17};do
-> python3 code/evaluation/calculate_gain.py -i data/cosine_similarity_{VALUE}.tsv -o data/hybrid_gain_${VALUE}.tsv
+> python3 code/evaluation/calculate_gain.py -i data/cosine_similarity_${VALUE}.tsv -o data/hybrid_gain_${VALUE}.tsv
 > done
 ```
 
